@@ -14,7 +14,7 @@
 <div class="container">
     <header class="header">
         <div class="logo">
-            <img height="auto" width="125" src="/public/img/welcome_logo.JPEG">
+            <img height="auto" width="175" src="/public/img/welcome_logo.JPEG">
         </div>
         <div id="topic-text">
             <h2>TonPlex</h2>
@@ -29,39 +29,42 @@
         console.log('Telegram Web App script started');
         Telegram.WebApp.ready();
 
-        const tg = Telegram.WebApp;
-        const user = tg.initDataUnsafe.user;
+            const tg = Telegram.WebApp;
+            let user = tg.initDataUnsafe.user;
+            // let user = {
+            //     name: "John",
+            //     age: 30,
+            //     city: "New York"
+            // };
 
-        tg.MainButton.text = "Let's Start!";
-        tg.MainButton.show() 
-
-        if (user) {
-            console.log('Telegram Web App initDataUnsafe available');
-            console.log('User data:', user);
+            tg.MainButton.text = "Let's Start!";
+            tg.MainButton.show() 
 
             if (user) {
-                document.getElementById('userId').innerText = `User Data: ${user}`;
+                console.log('Telegram Web App initDataUnsafe available');
+                console.log('User data:', user);
 
-                const userJsonString = JSON.stringify(user, null, 2);
-                document.getElementById('objectDisplay').textContent = jsonString;
-                
-                fetch('/api/save_user_id', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({user_id: user.id}),
-                }).then(response => console.log('Data sent:', response))
-                    .catch(error => console.error('Error sending data:', error));
-                
-            } else {
-                document.getElementById('userId').innerText = 'User data not available';
-                console.error('User data not available');
+                if (user) {
+                    const userJsonString = JSON.stringify(user, null, 2);
+                    document.getElementById('objectDisplay').textContent = userJsonString;
+                    
+                    fetch('/api/save_user_id', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({user_id: user.id}),
+                    }).then(response => console.log('Data sent:', response))
+                        .catch(error => console.error('Error sending data:', error));
+                    
+                } else {
+                    document.getElementById('objectDisplay').innerText = 'User data not available';
+                    console.error('User data not available');
+                }
+            } else if (!tg) {
+                document.getElementById('objectDisplay').innerText = 'Telegram Web App SDK не инициализирован';
+                console.error('Telegram Web App SDK не инициализирован');
             }
-        } else {
-            document.getElementById('userId').innerText = 'Telegram Web App SDK не инициализирован';
-            console.error('Telegram Web App SDK не инициализирован');
-        }
     </script>
 
     <!-- Eruda is console for mobile browsers -->

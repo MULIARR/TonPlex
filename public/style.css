@@ -18,15 +18,18 @@ body, html {
     padding: 10px 0;
 }
 
+.logo {
+    margin-top: 80px;
+}
+
 .logo img {
     max-width: 100%;
     height: auto;
-    background-color: white;
 }
 
 #topic-text h2 {
     margin: 10px 0;
-    font-size: 1.5rem;
+    font-size: 1.9rem;
 }
 
 .description {
@@ -37,6 +40,7 @@ body, html {
 .description p {
     margin: 10px 0;
     color: #7d7d7d;
+    font-size: 1.3rem;
 }
 
 #userId {
