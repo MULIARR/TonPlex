@@ -11,15 +11,21 @@
 
     <script>
         Telegram.WebApp.ready();
-        const user = Telegram.WebApp.initDataUnsafe.user;
-        document.getElementById('userId').innerText = `User ID: ${user.id}`;
-        fetch('/api/save_user_id', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({user_id: user.id}),
-        });
+
+        if (Telegram.WebApp.initDataUnsafe) {
+            const user = Telegram.WebApp.initDataUnsafe.user;
+            document.getElementById('userId').innerText = `User ID: ${user.id}`;
+
+            fetch('/api/save_user_id', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({user_id: user.id}),
+            });
+        } else {
+            document.getElementById('userId').innerText = 'Telegram Web App SDK not initialise';
+        }
     </script>
 </body>
 </html>
