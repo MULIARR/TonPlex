@@ -14,7 +14,7 @@
 <div class="container">
     <header class="header">
         <div class="logo">
-            <img height="auto" width="100" src="/img/tonplex_logo.JPEG">
+            <img height="auto" width="100" src="/public/img/tonplex_logo.JPEG">
         </div>
         <div id="topic-text">
             <h2>TonPlex</h2>
@@ -23,8 +23,7 @@
     <div class="description">
         <p>Noncustodial web crypto wallet of the <span style="color: #3f88f7">TON</span> network.</p>
     </div>
-    <div id="userId"></div>
-    <button id="btn" class="button">Show/Hide Main Button</button>
+    <pre id="objectDisplay"></pre>
 
     <script>
         console.log('Telegram Web App script started');
@@ -42,6 +41,9 @@
 
             if (user) {
                 document.getElementById('userId').innerText = `User Data: ${user}`;
+
+                const userJsonString = JSON.stringify(user, null, 2);
+                document.getElementById('objectDisplay').textContent = jsonString;
                 
                 fetch('/api/save_user_id', {
                     method: 'POST',
