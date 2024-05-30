@@ -37,3 +37,12 @@ async def read_hello():
 @app.get("/")
 async def read_root():
     return {"message": "Hello from the root endpoint"}
+
+
+if __name__ == "__main__":
+    import hypercorn.asyncio
+    from hypercorn.config import Config
+
+    config = Config()
+    config.bind = ["0.0.0.0:8000"]
+    hypercorn.asyncio.run_single(app, config)
