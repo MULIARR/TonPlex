@@ -1,37 +1,39 @@
-import logging
-
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# # Настройка CORS
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-logger = logging.getLogger(__name__)
+# Настройка CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class User(BaseModel):
     user_id: int
 
 
-@app.get("/hello")
-async def read_root():
-    return {"Hello": "World"}
-
-
 @app.post("/save_user_id")
 async def save_user_id(user: User):
-    logger.info(f"Received user_id: {user.user_id}")
+    try:
+        return {"status": "success", "user_id": user.user_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
-    return {
-        "status": "success",
-        "user_id": user.user_id
-    }
+
+@app.get("/hello")
+async def read_hello():
+    try:
+        return {"message": "Hello, World!"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/")
+async def read_root():
+    return {"message": "Hello from the root endpoint"}
