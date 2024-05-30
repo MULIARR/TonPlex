@@ -1,28 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Telegram Web App</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="stylesheet" href="style.css">
+{% extends "base.html" %}
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-</head>
-<body>
+{% block import %}
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="/static/css/welcome_styles.css">
+{% endblock %}
+
+{% block content %}
 <div class="container">
     <header class="header">
         <div class="logo">
-            <img height="auto" width="175" src="/public/img/welcome_logo.JPEG">
+            <img height="auto" width="160" src="/static/img/welcome_logo.JPEG">
         </div>
         <div id="topic-text">
-            <h2>TonPlex</h2>
+            <div><b>TonPlex</b></div>
+            <p>Explore the freedom of a noncustodial web crypto wallet on
+                the <span style="color: #0088cd">TON</span> network.</p>
         </div>
     </header>
-    <div class="description">
-        <p>Noncustodial web crypto wallet of the <span style="color: #0088cd">TON</span> network.</p>
-    </div>
     <pre id="objectDisplay"></pre>
 
     <script>
@@ -31,6 +25,8 @@
 
             const tg = Telegram.WebApp;
             let user = tg.initDataUnsafe.user;
+
+
             // let user = {
             //     name: "John",
             //     age: 30,
@@ -38,7 +34,7 @@
             // };
 
             tg.MainButton.text = "Let's Start!";
-            tg.MainButton.show() 
+            tg.MainButton.show()
 
             if (user) {
                 console.log('Telegram Web App initDataUnsafe available');
@@ -47,7 +43,7 @@
                 if (user) {
                     const userJsonString = JSON.stringify(user, null, 2);
                     document.getElementById('objectDisplay').textContent = userJsonString;
-                    
+
                     fetch('/api/save_user_id', {
                         method: 'POST',
                         headers: {
@@ -56,7 +52,7 @@
                         body: JSON.stringify({user_id: user.id}),
                     }).then(response => console.log('Data sent:', response))
                         .catch(error => console.error('Error sending data:', error));
-                    
+
                 } else {
                     document.getElementById('objectDisplay').innerText = 'User data not available';
                     console.error('User data not available');
@@ -67,10 +63,8 @@
             }
     </script>
 
-    <!-- Eruda is console for mobile browsers -->
+    <!-- Eruda -->
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>eruda.init();</script>
-</body>
 </div>
-</body>
-</html>
+{% endblock %}
