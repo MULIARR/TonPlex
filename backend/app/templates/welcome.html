@@ -2,6 +2,7 @@
 
 {% block import %}
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="/static/js/welcome.js"></script>
 <link rel="stylesheet" href="/static/css/welcome_styles.css">
 {% endblock %}
 
@@ -21,5 +22,12 @@
         <button id="create-wallet">Create New Wallet</button>
         <button id="import-wallet">Import Existing Wallet</button>
     </div>
+
+    <script>
+        document.getElementById('create-wallet').addEventListener('click', function() {
+            window.location.href = '/wallet_setup';
+        });
+    </script>
+
 </div>
 {% endblock %}

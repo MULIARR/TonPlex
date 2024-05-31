@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Request
-from starlette.templating import Jinja2Templates
+from fastapi.templating import Jinja2Templates
 
 from backend.config import config
 
-welcome_router = APIRouter()
-
 templates = Jinja2Templates(directory=config.app.TEMPLATES_DIR)
+
+welcome_router = APIRouter()
 
 
 @welcome_router.get("/")

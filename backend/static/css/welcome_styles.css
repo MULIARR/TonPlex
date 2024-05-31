@@ -10,7 +10,7 @@
 }
 
 .logo {
-    margin-top: 35px;
+    margin-top: 50px;
 }
 
 .logo img {
@@ -59,26 +59,22 @@
     color: #7d7d7d;
 }
 
-
-/* Hover state */
 button:hover {
     transform: scale(0.98);
 }
 
-/* Active state */
 button:active {
     transform: scale(0.95);
 }
 
-/* Focus state */
 button:focus {
     outline: none;
 }
 
-/* Touch devices active state */
-@media (hover: none) {
+@media (hover: none) and (pointer: coarse) {
     button:active {
         transform: scale(0.95);
+        transition: transform 0.2s ease;
     }
 }
 

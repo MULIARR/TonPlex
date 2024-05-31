@@ -4,4 +4,9 @@ body, html {
     font-family: Arial, sans-serif;
     background-color: black;
     color: #ecf6ff;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
