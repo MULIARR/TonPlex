@@ -78,8 +78,7 @@ async def start_bot(config: Config):
         ...
 
 
-async def start_app(config: Config):
-    # launch app
+def create_app(config: Config) -> FastAPI:
     app = FastAPI()
 
     app.mount("/static", StaticFiles(directory=config.app.STATIC_DIR), name="static")
@@ -87,7 +86,16 @@ async def start_app(config: Config):
     for router in routers_tuple:
         app.include_router(router)
 
-    config = uvicorn.Config(app, port=8005, host="0.0.0.0", log_level="info")  # host="0.0.0.0",
+    return app
+
+
+# Creating an application at the module level (to run the application locally)
+#  -> uvicorn launcher:app --reload --port 8005
+app = create_app(config)
+
+
+async def start_app():
+    config = uvicorn.Config(app, port=8005, log_level="info")  # host="0.0.0.0",
     server = uvicorn.Server(config)
     await server.serve()
 

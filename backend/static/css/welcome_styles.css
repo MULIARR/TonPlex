@@ -32,10 +32,39 @@
 }
 
 .buttons-container {
-    background-color: #ecf6ff;
-    color: red;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    padding: 20px;
+    max-width: 300px;
+    margin: 0 auto;
 }
 
+.buttons-container button {
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid transparent;
+    font-size: 1.3em;
+}
+
+#create-wallet {
+    color: #ecf6ff;
+    margin-bottom: 15px;
+    background-color: #0088cd;
+}
+
+#import-wallet {
+    background-color: #1c1c1e;
+    color: #7d7d7d;
+}
+
+.buttons-container button:hover {
+    transform: scale(0.99);
+}
+
+.buttons-container button:active {
+    transform: scale(0.95);
+}
 
 #objectDisplay {
     text-align: center;
