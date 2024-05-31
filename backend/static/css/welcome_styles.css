@@ -10,7 +10,7 @@
 }
 
 .logo {
-    margin-top: 50px;
+    margin-top: 35px;
 }
 
 .logo img {
@@ -41,10 +41,11 @@
 }
 
 .buttons-container button {
-    padding: 20px;
+    padding: 17px;
     border-radius: 15px;
     border: 2px solid transparent;
     font-size: 1.3em;
+    transition: transform 0.15s ease;
 }
 
 #create-wallet {
@@ -58,13 +59,29 @@
     color: #7d7d7d;
 }
 
-.buttons-container button:hover {
-    transform: scale(0.99);
+
+/* Hover state */
+button:hover {
+    transform: scale(0.98);
 }
 
-.buttons-container button:active {
+/* Active state */
+button:active {
     transform: scale(0.95);
 }
+
+/* Focus state */
+button:focus {
+    outline: none;
+}
+
+/* Touch devices active state */
+@media (hover: none) {
+    button:active {
+        transform: scale(0.95);
+    }
+}
+
 
 #objectDisplay {
     text-align: center;
