@@ -1,1 +1,1 @@
-web: ./backend/start.sh
+web: backend\start.bat
