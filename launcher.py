@@ -103,7 +103,7 @@ async def start_app():
 async def main(config: Config):
     setup_logging()
 
-    app_task = asyncio.create_task(start_app(config))
+    app_task = asyncio.create_task(start_app())
     bot_task = asyncio.create_task(start_bot(config))
 
     await asyncio.gather(app_task, )
