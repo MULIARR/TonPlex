@@ -9,8 +9,6 @@ app = FastAPI()
 
 app.mount("/static", StaticFiles(directory=app_config.STATIC_DIR), name="static")
 
-templates = Jinja2Templates(directory=app_config.TEMPLATES_DIR)
-
 app.include_router(welcome_router)
 # app.include_router(wallet_setup_router)
 
