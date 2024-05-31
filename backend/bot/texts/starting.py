@@ -1,0 +1,2 @@
+class StartTexts:
+    START = "aaa"
