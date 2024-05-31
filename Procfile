@@ -1,1 +1,1 @@
-web: backend\start.bat
+web: uvicorn main:app --host 0.0.0.0 --port $PORT
