@@ -2,57 +2,59 @@
 
 {% block import %}
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="/static/css/create_wallet_styles.css">
+<link rel="stylesheet" href="/static/css/create_styles.css">
 {% endblock %}
 
-<!--    <pre id="objectDisplay"></pre>-->
+{% block content %}
+<div class="container">
+    <header class="header">
+        <div class="logo">
+            <img height="auto" width="160" src="/static/img/Memo.webp">
+        </div>
+        <div id="topic-text">
+            <div><b>Seed Phrase</b></div>
+            <p>Write down your seed phrase on paper and keep it in a safe place. It is needed to restore <span style="color: #0088cd">access</span> to your wallet.</p>
+        </div>
+    </header>
 
-<script>
-    console.log('Telegram Web App script started');
-    Telegram.WebApp.ready();
+    <div class="mnemonic-container">
+        <ol class="column">
+            {% for i in range(0, 12) %}
+            <li>{{ wallet_mnemonic_phrase[i] }}</li>
+            {% endfor %}
+        </ol>
+        <ol class="column" start="13">
+            {% for i in range(12, 24) %}
+            <li>{{ wallet_mnemonic_phrase[i] }}</li>
+            {% endfor %}
+        </ol>
+    </div>
 
-    const tg = Telegram.WebApp;
-    let user = tg.initDataUnsafe.user;
+    <div class="button-container">
+        <button class="copy-button" onclick="copyToClipboard()" data-phrase="{{ wallet_mnemonic_phrase | join(' ') }}">Copy Phrase</button>
+    </div>
 
+    <script>
+        const tg = Telegram.WebApp
 
-    // let user = {
-    //     name: "John",
-    //     age: 30,
-    //     city: "New York"
-    // };
+        tg.MainButton.text = "Let's Start!"
 
-    tg.MainButton.text = "Let's Start!";
-    tg.MainButton.show()
-
-    if (user) {
-        console.log('Telegram Web App initDataUnsafe available');
-        console.log('User data:', user);
-
-        if (user) {
-            const userJsonString = JSON.stringify(user, null, 2);
-            document.getElementById('objectDisplay').textContent = userJsonString;
-
-            fetch('/api/save_user_id', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({user_id: user.id}),
-            }).then(response => console.log('Data sent:', response))
-                .catch(error => console.error('Error sending data:', error));
-
-        } else {
-            document.getElementById('objectDisplay').innerText = 'User data not available';
-            console.error('User data not available');
+        if (tg.isExpanded) {
+            tg.MainButton.show()
         }
-    } else if (!tg) {
-        document.getElementById('objectDisplay').innerText = 'Telegram Web App SDK не инициализирован';
-        console.error('Telegram Web App SDK не инициализирован');
-    }
-</script>
 
-<!-- Eruda -->
-<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
+        function copyToClipboard() {
+            const button = document.querySelector('.copy-button');
+            const textToCopy = button.getAttribute('data-phrase');
 
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    tg.showAlert('Copied!')
+                })
+                .catch(err => {
+                    console.error('Could not copy seed-phrase: ', err);
+                });
+        }
+    </script>
+</div>
 {% endblock %}

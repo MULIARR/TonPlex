@@ -20,7 +20,7 @@
 
 #topic-text div {
     margin: 10px 0;
-    font-size: 5rem;
+    font-size: 2.5em;
 }
 
 #topic-text p {
@@ -28,33 +28,43 @@
     margin: 0 auto;
     line-height: 1.2em;
     color: #7d7d7d;
-    font-size: 1.3rem;
+    font-size: 1.2em;
 }
 
-.buttons-container {
+.mnemonic-container {
+    margin-top: 20px;
+    margin-left: 30px;
+    color: #ecf6ff;
     display: flex;
-    flex-direction: column;
-    align-content: center;
-    padding: 20px;
-    max-width: 300px;
-    margin: 0 auto;
+    justify-content: center;
 }
 
-.buttons-container button {
-    padding: 17px;
+.column {
+    padding: 0;
+    margin: 0 40px;
+}
+
+.column li {
+    margin-bottom: 3px;
+    font-size: 1.1em;
+}
+
+.column li::marker {
+    color: #7d7d7d;
+}
+
+.button-container {
+    margin-top: 23px;
+    display: flex;
+    justify-content: center;
+}
+
+.button-container button {
+    padding: 7px 15px;
     border-radius: 15px;
     border: 2px solid transparent;
-    font-size: 1.3em;
+    font-size: 1.1em;
     transition: transform 0.15s ease;
-}
-
-#create-wallet {
-    color: #ecf6ff;
-    margin-bottom: 15px;
-    background-color: #0088cd;
-}
-
-#import-wallet {
     background-color: #1c1c1e;
     color: #7d7d7d;
 }
@@ -75,19 +85,5 @@ button:focus {
     button:active {
         transform: scale(0.95);
         transition: transform 0.2s ease;
-    }
-}
-
-@media (max-width: 600px) {
-    .header {
-        padding: 5px 0;
-    }
-
-    #topic h2 {
-        font-size: 1.4rem;
-    }
-
-    #desc p {
-        font-size: 1.1rem;
     }
 }

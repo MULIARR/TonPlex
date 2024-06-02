@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block import %}
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="/static/js/welcome.js"></script>
 <link rel="stylesheet" href="/static/css/welcome_styles.css">
 {% endblock %}
@@ -25,7 +24,7 @@
 
     <script>
         document.getElementById('create-wallet').addEventListener('click', function() {
-            window.location.href = '/wallet_setup';
+            window.location.href = '/wallet_setup/create';
         });
     </script>
 
