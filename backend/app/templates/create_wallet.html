@@ -35,13 +35,14 @@
     </div>
 
     <script>
+        Telegram.WebApp.ready();
+
         const tg = Telegram.WebApp
+        tg.expand();
 
         tg.MainButton.text = "Let's Start!"
-
-        if (tg.isExpanded) {
-            tg.MainButton.show()
-        }
+        tg.MainButton.onClick(callback)
+        tg.MainButton.show()
 
         function copyToClipboard() {
             const button = document.querySelector('.copy-button');
@@ -54,6 +55,8 @@
                 .catch(err => {
                     console.error('Could not copy seed-phrase: ', err);
                 });
+
+            tg.sendData("some string that we need to send");
         }
     </script>
 </div>
