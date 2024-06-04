@@ -6,3 +6,9 @@ betterlogging
 environs
 strenum
 jinja2
+tonsdk
+pytonlib
+cryptography
+SQLAlchemy
+asyncpg
+requests

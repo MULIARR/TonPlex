@@ -79,6 +79,26 @@ class TgBotConfig:
 
 
 @dataclass
+class EncryptionConfig:
+    """
+    Fernet configuration class.
+    """
+
+    encryption_key: str
+
+    @staticmethod
+    def from_env(env: Env):
+        """
+        Creates the Fernet object from environment variables.
+        """
+        encryption_key = env.str("ENCRYPTION_KEY")
+
+        return EncryptionConfig(
+            encryption_key=encryption_key
+        )
+
+
+@dataclass
 class Config:
     """
     The main configuration class that integrates all the other configuration classes.
@@ -87,6 +107,7 @@ class Config:
 
     app: AppConfig
     tg_bot: TgBotConfig
+    encryption: EncryptionConfig
     # db: DbConfig
 
 
@@ -104,6 +125,7 @@ def load_config(path: str = None) -> Config:
     return Config(
         app=AppConfig.load_paths(),
         tg_bot=TgBotConfig.from_env(env),
+        encryption=EncryptionConfig.from_env(env),
         # db=DbConfig.from_env(env),
     )
 

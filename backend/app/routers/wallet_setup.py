@@ -1,6 +1,9 @@
+from pprint import pprint
+
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
 
+from backend.classes.ton_manager import ton_manager
 from backend.config import config
 
 templates = Jinja2Templates(directory=config.app.TEMPLATES_DIR)
@@ -13,18 +16,13 @@ wallet_setup_router = APIRouter(
 @wallet_setup_router.get("/create")
 async def get_wallet_setup(request: Request):
 
-    # TODO: create wallet with tontools
-    wallet_mnemonics = [
-        "apple", "bread", "clock", "dance", "eagle", "flame",
-        "grape", "house", "index", "jumps", "kites", "lemon",
-        "mango", "night", "olive", "plant", "queen", "river",
-        "sunny", "trees", "under", "vivid", "wings", "zebra"
-    ]
+    # create TON wallet
+    wallet_model = ton_manager.create_wallet()
 
     return templates.TemplateResponse(
         "create_wallet.html",
         {
-            "wallet_mnemonic_phrase": wallet_mnemonics,
+            "wallet_mnemonic_phrase": wallet_model.mnemonics,
             "request": request
         }
     )
