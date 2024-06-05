@@ -161,7 +161,7 @@ async def main():
     # print(await ton_manager.get_seqno(wallet_model.wallet))
     # print(await ton_manager.deploy_wallet(wallet_model.wallet))
 
-    # await ton_manager.deploy_wallet(wallet_model.wallet)
+    # await ton_manager.deploy_wallet(wallet_model.wallet)ddd
 
 
 # asyncio.get_event_loop().run_until_complete(main())
