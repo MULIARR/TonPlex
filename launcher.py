@@ -13,6 +13,7 @@ from fastapi.staticfiles import StaticFiles
 from backend.app.routers import routers_tuple
 from backend.bot.handlers import main_router
 from backend.bot.middlewares.config import ConfigMiddleware
+from backend.classes.ton_wallet_manager import ton_manager
 from backend.config import Config, config
 from backend.utils.logo import print_logo
 
@@ -54,6 +55,21 @@ def setup_logging():
     )
     logger = logging.getLogger(__name__)
     logger.info("Starting App")
+
+
+async def lazy_init():
+    """
+    An asynchronous function for lazily initializing clients or other objects.
+
+    This function is needed to initialize objects that should only be created
+    when accessing them for the first time, thereby postponing the creation of resource-intensive objects
+    until they are actually needed.
+
+    The function is called on a shared asynchronous event pool, ensuring that initialization occurs
+    in an asynchronous context without blocking the main thread of execution.
+    :return:
+    """
+    await ton_manager.init_client()
 
 
 async def start_bot(config: Config):
@@ -106,6 +122,7 @@ async def start_app():
 
 async def main(config: Config):
     setup_logging()
+    await lazy_init()
 
     app_task = asyncio.create_task(start_app())
     bot_task = asyncio.create_task(start_bot(config))

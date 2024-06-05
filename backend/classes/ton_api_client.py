@@ -40,8 +40,3 @@ async def main():
     print(f"Account Balance (nanoton): {account.balance.to_nano()}")
     print(f"Account Balance (amount): {account.balance.to_amount()}")
 
-
-# if __name__ == '__main__':
-#     import asyncio
-#
-#     asyncio.get_event_loop().run_until_complete(main())

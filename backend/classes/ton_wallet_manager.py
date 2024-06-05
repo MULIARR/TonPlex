@@ -23,7 +23,7 @@ class TonWallet(BaseModel):
         arbitrary_types_allowed = True
 
 
-class TonManager:
+class TONWalletManager:
     def __init__(self):
         url_config = 'https://ton.org/global-config.json'
         config = requests.get(url_config).json()
@@ -142,8 +142,8 @@ class TonManager:
         return True
 
 
-ton_manager = TonManager()
-asyncio.get_event_loop().run_until_complete(ton_manager.init_client())
+# lazy init
+ton_manager = TONWalletManager()
 
 
 # mnemonics = ['mirror', 'shoot', 'mercy', 'share', 'step', 'picture', 'grant', 'promote', 'stock', 'absent', 'picnic', 'vacuum', 'apple', 'else', 'promote', 'income', 'slot', 'behave', 'shock', 'champion', 'mystery', 'father', 'stone', 'media']

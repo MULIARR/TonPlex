@@ -39,14 +39,17 @@
         tg.expand();
 
         tg.MainButton.text = "Skip And Continue";
-        console.log(tg);
         tg.MainButton.onClick(function() {
             hapticFeedback('medium');
         });
         tg.MainButton.show();
 
-        function hapticFeedback(level) {
-            tg.HapticFeedback.impactOccurred(level);
+        function hapticFeedback(style) {
+            if (tg.hapticFeedback && typeof tg.hapticFeedback.impactOccurred === 'function') {
+                tg.hapticFeedback.impactOccurred(style);
+            } else {
+                console.log('HapticFeedback is not supported in this version');
+            }
         }
 
         function copyToClipboard() {
