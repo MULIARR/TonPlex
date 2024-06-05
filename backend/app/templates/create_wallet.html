@@ -45,11 +45,10 @@
         tg.MainButton.show();
 
         function hapticFeedback(style) {
-            if (tg.hapticFeedback && typeof tg.hapticFeedback.impactOccurred === 'function') {
-                tg.hapticFeedback.impactOccurred(style);
-            } else {
-                console.log('HapticFeedback is not supported in this version');
-            }
+            console.log(tg)
+            console.log(`Telegram WebApp version: ${tg.version}`);
+            console.log(tg.HapticFeedback);
+            tg.HapticFeedback.impactOccurred(style);
         }
 
         function copyToClipboard() {
