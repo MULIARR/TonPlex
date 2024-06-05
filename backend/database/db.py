@@ -2,7 +2,6 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 from backend.config import config
-from backend.database.models.user import User
 
 
 class Database:
