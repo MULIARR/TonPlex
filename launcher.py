@@ -9,12 +9,14 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.fsm.storage.memory import MemoryStorage
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy import text
 
 from backend.app.routers import routers_tuple
 from backend.bot.handlers import main_router
 from backend.bot.middlewares.config import ConfigMiddleware
 from backend.classes.ton_wallet_manager import ton_manager
 from backend.config import Config, config
+from backend.database.db import database
 from backend.utils.logo import print_logo
 
 
@@ -70,6 +72,16 @@ async def lazy_init():
     :return:
     """
     await ton_manager.init_client()
+
+    # await database.init_db()
+    #
+    # # Проверка существования таблицы
+    # async with database.engine.connect() as conn:
+    #     result = await conn.execute(text("SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname = 'public';"))
+    #     tables = result.fetchall()
+    #     print("Tables in the public schema:")
+    #     for table in tables:
+    #         print(table)
 
 
 async def start_bot(config: Config):

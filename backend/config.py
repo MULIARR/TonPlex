@@ -30,11 +30,7 @@ class DbConfig:
     This class holds the settings for the database, such as host, password, port, etc.
     """
 
-    host: str
-    password: str
-    user: str
-    database: str
-    port: int = 5432
+    database_url: str
 
     @staticmethod
     def from_env(env: Env):
@@ -47,8 +43,10 @@ class DbConfig:
         database = env.str("POSTGRES_DB")
         port = env.int("DB_PORT", 5432)
 
+        database_url = f'postgresql+asyncpg://{user}:{password}@{host}/{database}'
+
         return DbConfig(
-            host=host, password=password, user=user, database=database, port=port
+            database_url=database_url
         )
 
 
@@ -129,7 +127,7 @@ class Config:
     tg_bot: TgBotConfig
     encryption: EncryptionConfig
     tonapi: TONApiConfig
-    # db: DbConfig
+    db: DbConfig
 
 
 def load_config(path: str = None) -> Config:
@@ -148,7 +146,7 @@ def load_config(path: str = None) -> Config:
         tg_bot=TgBotConfig.from_env(env),
         encryption=EncryptionConfig.from_env(env),
         tonapi=TONApiConfig.from_env(env),
-        # db=DbConfig.from_env(env),
+        db=DbConfig.from_env(env),
     )
 
 

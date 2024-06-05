@@ -31,10 +31,3 @@ class EncryptionManager:
 
 
 encryption_manager = EncryptionManager(config.encryption.encryption_key)
-
-# mnemonic = '_'.join(mnemonics)
-# encrypted_mnemonic = encryption_manager.encrypt(mnemonic)
-# print(encrypted_mnemonic)
-#
-# decrypted_mnemonic = encryption_manager.decrypt(encrypted_mnemonic)
-# print(decrypted_mnemonic.split('_'))
