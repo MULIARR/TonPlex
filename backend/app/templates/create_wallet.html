@@ -46,13 +46,13 @@
         tg.MainButton.show();
 
         function hapticFeedback(level) {
-            tg.HapticFeedback.impactOccurred(level);
+            tg.impactOccurred(level);
         }
 
         function copyToClipboard() {
             const button = document.querySelector('.copy-button');
             const textToCopy = button.getAttribute('data-phrase');
-
+Feedba
             navigator.clipboard.writeText(textToCopy)
                 .then(() => {
                     button.innerText = 'Copied!';
