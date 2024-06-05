@@ -164,7 +164,7 @@ async def main():
     # await ton_manager.deploy_wallet(wallet_model.wallet)
 
 
-asyncio.get_event_loop().run_until_complete(main())
+# asyncio.get_event_loop().run_until_complete(main())
 
 
 # mnemonics = ['loyal', 'tiny', 'furnace', 'hip', 'such', 'curtain', 'ensure', 'fresh', 'rely', 'budget', 'rocket', 'system', 'suspect', 'confirm', 'hedgehog', 'okay', 'fuel', 'topic', 'force', 'spoon', 'stool', 'sunset', 'display', 'review']
