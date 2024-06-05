@@ -3,7 +3,7 @@ from pprint import pprint
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
 
-from backend.classes.ton_manager import ton_manager
+from backend.classes.ton_wallet_manager import ton_manager
 from backend.config import config
 
 templates = Jinja2Templates(directory=config.app.TEMPLATES_DIR)

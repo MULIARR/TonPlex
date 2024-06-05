@@ -40,8 +40,14 @@
 
         tg.MainButton.text = "Skip And Continue";
         console.log(tg);
-        // tg.MainButton.onClick(callback)
-        // tg.MainButton.show()
+        tg.MainButton.onClick(function() {
+            hapticFeedback('medium');
+        });
+        tg.MainButton.show();
+
+        function hapticFeedback(level) {
+            tg.HapticFeedback.impactOccurred(level);
+        }
 
         function copyToClipboard() {
             const button = document.querySelector('.copy-button');
@@ -52,7 +58,9 @@
                     button.innerText = 'Copied!';
                     button.style.backgroundColor = 'seagreen';
                     button.style.color = 'white';
-                    tg.MainButton.text = "Let's Start!"
+                    tg.MainButton.text = "Let's Start!";
+
+                    hapticFeedback('light');
                 })
                 .catch(err => {
                     console.error('Could not copy seed-phrase: ', err);

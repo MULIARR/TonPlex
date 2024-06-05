@@ -14,6 +14,7 @@ from backend.app.routers import routers_tuple
 from backend.bot.handlers import main_router
 from backend.bot.middlewares.config import ConfigMiddleware
 from backend.config import Config, config
+from backend.utils.logo import print_logo
 
 
 def get_storage(config):
@@ -109,10 +110,9 @@ async def main(config: Config):
     app_task = asyncio.create_task(start_app())
     bot_task = asyncio.create_task(start_bot(config))
 
-    await asyncio.gather(app_task, )
-
-    # uvicorn.run(app, port=8000)  # host="0.0.0.0"
+    await asyncio.gather(app_task, bot_task)
 
 
 if __name__ == "__main__":
+    print_logo()
     asyncio.run(main(config))

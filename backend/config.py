@@ -99,6 +99,26 @@ class EncryptionConfig:
 
 
 @dataclass
+class TONApiConfig:
+    """
+    Fernet configuration class.
+    """
+
+    tonapi_key: str
+
+    @staticmethod
+    def from_env(env: Env):
+        """
+        Creates the Fernet object from environment variables.
+        """
+        tonapi_key = env.str("TONAPI_KEY")
+
+        return TONApiConfig(
+            tonapi_key=tonapi_key
+        )
+
+
+@dataclass
 class Config:
     """
     The main configuration class that integrates all the other configuration classes.
@@ -108,6 +128,7 @@ class Config:
     app: AppConfig
     tg_bot: TgBotConfig
     encryption: EncryptionConfig
+    tonapi: TONApiConfig
     # db: DbConfig
 
 
@@ -126,6 +147,7 @@ def load_config(path: str = None) -> Config:
         app=AppConfig.load_paths(),
         tg_bot=TgBotConfig.from_env(env),
         encryption=EncryptionConfig.from_env(env),
+        tonapi=TONApiConfig.from_env(env),
         # db=DbConfig.from_env(env),
     )
 

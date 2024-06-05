@@ -12,3 +12,5 @@ cryptography
 SQLAlchemy
 asyncpg
 requests
+colorama
+pytonapi
