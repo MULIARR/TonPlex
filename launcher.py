@@ -69,7 +69,7 @@ async def lazy_init():
 
     The function is called on a shared asynchronous event pool, ensuring that initialization occurs
     in an asynchronous context without blocking the main thread of execution.
-    :return:
+    :return: `
     """
     await ton_manager.init_client()
 
