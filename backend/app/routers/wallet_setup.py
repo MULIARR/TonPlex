@@ -14,7 +14,7 @@ wallet_setup_router = APIRouter(
 )
 
 
-@wallet_setup_router.post("/create")
+@wallet_setup_router.get("/create")
 async def get_wallet_setup(request: Request):
 
     # create TON wallet (Oh no that sync!!!)
