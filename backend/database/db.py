@@ -17,9 +17,7 @@ class Database:
 
     async def init_db(self):
         async with self.engine.begin() as conn:
-            print("Starting database initialization...")
             await conn.run_sync(self.Base.metadata.create_all)
-            print("Database initialization complete.")
 
 
 database = Database(config.db.database_url)

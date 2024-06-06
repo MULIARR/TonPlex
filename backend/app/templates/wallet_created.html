@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
 {% block import %}
-<link rel="stylesheet" href="/static/css/create_styles.css">
+<link rel="stylesheet" href="/static/css/wallet_created.css">
 {% endblock %}
 
 {% block content %}
 <div class="container">
     <header class="header">
         <div class="logo">
-            <img height="auto" width="160" src="/static/img/Key.webp">
+            <img height="auto" width="160" src="/static/img/lock.jpeg">
         </div>
         <div id="topic-text">
             <div><b>Seed Phrase</b></div>
@@ -51,9 +51,9 @@
 
             navigator.clipboard.writeText(textToCopy)
                 .then(() => {
-                    button.innerText = 'Copied!';
-                    button.style.backgroundColor = 'seagreen';
-                    button.style.color = 'white';
+                    button.innerText = 'Copied';
+                    button.style.color = 'seagreen';
+                    button.style.border = '2px solid seagreen';
                     tg.MainButton.text = "Let's Start!";
                 })
                 .catch(err => {
@@ -62,7 +62,7 @@
         }
 
         function openWallet() {
-            console.log(tg.initDataUnsafe);
+            console.log(tg.initDataUnsafe.user);
         }
     </script>
 

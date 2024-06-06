@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block import %}
-<script src="/static/js/welcome.js"></script>
 <link rel="stylesheet" href="/static/css/welcome_styles.css">
 {% endblock %}
 
@@ -9,7 +8,7 @@
 <div class="container">
     <header class="header">
         <div class="logo">
-            <img height="auto" width="160" src="/static/img/welcome_logo.JPEG">
+            <img height="auto" width="160" src="/static/img/welcomelogo.png">
         </div>
         <div id="topic-text">
             <div><b>TonPlex</b></div>
@@ -23,8 +22,37 @@
     </div>
 
     <script>
+        const tg = window.Telegram.WebApp;
+
         document.getElementById('create-wallet').addEventListener('click', function() {
-            window.location.href = '/wallet_setup/create';
+            const userModel = {
+                allows_write_to_pm: true,
+                first_name: 'Dania',
+                id: 9097,
+                language_code: 'en',
+                last_name: 'Muliar',
+                username: 'yamuliar'
+            };
+
+            // const userModel = tg.initDataUnsafe.user
+
+            fetch('/wallet_setup/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userModel)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = response.url;
+                    } else {
+                        return response.json().then(data => {
+                            console.error('Error:', data);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
     </script>
 

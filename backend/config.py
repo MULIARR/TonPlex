@@ -45,8 +45,6 @@ class DbConfig:
 
         database_url = f'postgresql+asyncpg://{user}:{password}@{host}/{database}'
 
-        database_url = 'postgresql+asyncpg://neondb_owner:F8LW0cMTSkYN@ep-patient-star-a2mfu5so.eu-central-1.aws.neon.tech/TonPlex'
-
         return DbConfig(
             database_url=database_url
         )

@@ -15,7 +15,8 @@ class UserRepo:
 
             # decrypt wallet mnemonic
             if user:
-                user.mnemonic = encryption_manager.decrypt(user.mnemonic)
+                decrypted_mnemonic = encryption_manager.decrypt(user.mnemonic).split('_')
+                user.mnemonic = decrypted_mnemonic
             return user
 
     async def create_user(self, user_id: int, mnemonic: str):
