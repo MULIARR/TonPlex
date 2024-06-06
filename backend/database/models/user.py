@@ -1,5 +1,4 @@
 from sqlalchemy import Column, Integer, String
-
 from backend.database.db import Database
 
 

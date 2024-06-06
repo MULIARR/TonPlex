@@ -73,15 +73,7 @@ async def lazy_init():
     """
     await ton_manager.init_client()
 
-    # await database.init_db()
-    #
-    # # Проверка существования таблицы
-    # async with database.engine.connect() as conn:
-    #     result = await conn.execute(text("SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname = 'public';"))
-    #     tables = result.fetchall()
-    #     print("Tables in the public schema:")
-    #     for table in tables:
-    #         print(table)
+    await database.init_db()
 
 
 async def start_bot(config: Config):
@@ -101,10 +93,8 @@ async def start_bot(config: Config):
 
         await bot.delete_webhook(drop_pending_updates=True)
 
-        # await db.create_pool(**vars(config.db))
         await dp.start_polling(bot)
     finally:
-        # await db.pool.close()
         ...
 
 

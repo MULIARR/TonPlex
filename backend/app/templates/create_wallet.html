@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block import %}
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="stylesheet" href="/static/css/create_styles.css">
 {% endblock %}
 
@@ -39,17 +38,12 @@
         tg.expand();
 
         tg.MainButton.text = "Skip And Continue";
-        tg.MainButton.onClick(function() {
-            hapticFeedback('medium');
-        });
-        tg.MainButton.show();
 
-        function hapticFeedback(style) {
-            console.log(tg)
-            console.log(`Telegram WebApp version: ${tg.version}`);
-            console.log(tg.HapticFeedback);
-            tg.HapticFeedback.impactOccurred(style);
-        }
+        tg.MainButton.onClick(function() {
+            openWallet();
+        });
+
+        tg.MainButton.show();
 
         function copyToClipboard() {
             const button = document.querySelector('.copy-button');
@@ -61,12 +55,14 @@
                     button.style.backgroundColor = 'seagreen';
                     button.style.color = 'white';
                     tg.MainButton.text = "Let's Start!";
-
-                    hapticFeedback('light');
                 })
                 .catch(err => {
                     console.error('Could not copy seed-phrase: ', err);
                 });
+        }
+
+        function openWallet() {
+            console.log(tg.initDataUnsafe);
         }
     </script>
 

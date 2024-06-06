@@ -7,7 +7,3 @@ document.getElementById('create-wallet').addEventListener('click', function() {
         body: JSON.stringify({ user_id: 'example_user_id' })
     })
 });
-
-function hapticFeedback(level) {
-    tg.impactOccurred(level);
-}
