@@ -66,6 +66,7 @@
     font-size: 1.1em;
     transition: transform 0.15s ease;
     color: #7d7d7d;
+    background-color: #1c1c1e;
 }
 
 button:hover {
