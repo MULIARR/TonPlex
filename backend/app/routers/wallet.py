@@ -1,42 +1,46 @@
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
 
+from backend.app.models.user import UserModel
 from backend.classes.ton_wallet_manager import ton_manager
 from backend.config import config
 from backend.database.repo.user import user_repo
 
 templates = Jinja2Templates(directory=config.app.TEMPLATES_DIR)
 
-wallet_setup_router = APIRouter(
+wallet_router = APIRouter(
     prefix="/wallet"
 )
 
 
-@wallet_setup_router.post("/")
-async def get_wallet_setup(request: Request, user_model: UserModel):
+@wallet_router.get("/")
+async def get_wallet(request: Request, user_id: int):
+    # print(user_model)
+    #
+    # # create TON wallet (Oh no that sync!!!)
+    # wallet_model = ton_manager.create_wallet()
+    #
+    # # db entry
+    # # await user_repo.create_user()
 
-    print(user_model)
-
-    # create TON wallet (Oh no that sync!!!)
-    wallet_model = ton_manager.create_wallet()
-
-    # db entry
-    # await user_repo.create_user()
-
-    return templates.TemplateResponse(
-        "wallet_created.html",
-        {
-            "wallet_mnemonic_phrase": wallet_model.mnemonics,
-            "request": request
+    wallet_data = {
+        "balance": 90.97,
+        "address": "Uia78...GSybq8",
+        "assets": {
+            "TON": {
+                "symbol": "TON",
+                "name": "Toncoin",
+                "value": 5,
+                "price": 45.5,
+                "img": None
+            }
         }
-    )
+    }
 
-
-@wallet_setup_router.get("/import")
-async def get_wallet_setup(request: Request):
     return templates.TemplateResponse(
-        "import_wallet.html",
+        "wallet.html",
         {
-            "request": request
+            "request": request,
+            "wallet_data": wallet_data
         }
     )

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
-from starlette.responses import RedirectResponse, JSONResponse
+from starlette.responses import RedirectResponse
 
 from backend.app.models.user import UserModel
 from backend.classes.ton_wallet_manager import ton_manager

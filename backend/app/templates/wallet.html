@@ -2,7 +2,7 @@
 
 {% block import %}
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="/static/css/wallet_styles.css">
+<link rel="stylesheet" href="/static/css/wallet.css">
 {% endblock %}
 
 {% block content %}
@@ -12,30 +12,49 @@
     </header>
     <hr>
     <div class="balance-container">
-        <p>97.25 $</p>
+        <p>{{wallet_data['balance']}} $</p>
+        <span>{{wallet_data['address']}}</span>
     </div>
     <div class="utility-container">
-        <div id="in">
-
+        <div class="item">
+            <img height="auto" width="45" src="/static/img/Inbox.png">
+            <span>Receive</span>
         </div>
-        <div id="out">
-
+        <div class="item">
+            <img height="auto" width="45" src="/static/img/Outbox.png">
+            <span>Send</span>
         </div>
     </div>
-    <div class="actives-container">
-        <!-- actives -->
+    <hr>
+    <div class="assets-container">
+<!--        <p style="font-size: 1.2rem; color: #7d7d7d;">Assets</p>-->
+
+
+        {% for asset in wallet_data['assets'].values() %}
+
+        <div class="card">
+            <div class="icon">
+                <img src="/static/img/Toncoin.png">
+            </div>
+            <div class="content">
+                <div class="title">{{ asset['name'] }}</div>
+                <div class="subtitle"> {{ asset['value'] }} {{ asset['symbol'] }}</div>
+            </div>
+            <div class="price">{{ asset['price'] }} $</div>
+        </div>
+        {% endfor %}
     </div>
     <hr>
     <footer>
-
+        <div class="card">
+            <div class="icon">
+                <img src="/static/img/Folder.png">
+            </div>
+            <div class="content">
+                <div class="history">Transactions History</div>
+            </div>
+            <div class="arrow">›</div>
+        </div>
     </footer>
-
-    <script>
-
-    </script>
-
-    <!-- Eruda -->
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
 </div>
 {% endblock %}
