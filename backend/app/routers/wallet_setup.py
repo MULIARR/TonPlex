@@ -17,8 +17,6 @@ wallet_setup_router = APIRouter(
 @wallet_setup_router.post("/create")
 async def get_wallet_setup(request: Request, user_model: UserModel):
 
-    print(user_model)
-
     # create TON wallet (Oh no that sync!!!)
     wallet_model = ton_manager.create_wallet()
 
