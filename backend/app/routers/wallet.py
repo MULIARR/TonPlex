@@ -25,7 +25,8 @@ async def get_wallet(request: Request, user_id: int):
 
     wallet_data = {
         "balance": 90.97,
-        "address": "Uia78...GSybq8",
+        "address": "Uia78HFjnjwe892JIJEi_GSybq8",
+        "shorten_address": "Uia78...GSybq8",
         "assets": {
             "TON": {
                 "symbol": "TON",
