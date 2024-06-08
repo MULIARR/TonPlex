@@ -4,12 +4,16 @@ from pytonapi import AsyncTonapi
 from pytonapi.schema.blockchain import Transactions
 from pytonapi.utils import nano_to_amount
 
+from backend.app.models.wallet_data import WalletDataModel
 from backend.config import config
 
 
 class AsyncTONApiClient:
     def __init__(self, tonapi_key: str):
         self.tonapi_client = AsyncTonapi(api_key=tonapi_key)
+
+    async def get_wallet_data(self, account: str) -> WalletDataModel:
+        pass
 
     async def get_account_balance(self, account: str):
         jettons_data = await self.tonapi_client.accounts.get_jettons_balances(account_id=account)
@@ -50,5 +54,5 @@ async def main():
     # print(f"Account Balance (amount): {account.balance.to_amount()}")
 
 
-asyncio.run(main())
+# asyncio.run(main())
 

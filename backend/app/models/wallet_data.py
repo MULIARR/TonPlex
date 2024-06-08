@@ -7,8 +7,8 @@ class Asset(BaseModel):
     image: str
 
 
-class UserBalance(BaseModel):
+class WalletDataModel(BaseModel):
     total: float
     wallet_address: str
     shorten_wallet_address: str
-    assets: dict[Asset]
+    assets: list[Asset]

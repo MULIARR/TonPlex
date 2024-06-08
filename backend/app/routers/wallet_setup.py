@@ -3,7 +3,7 @@ from fastapi.templating import Jinja2Templates
 from starlette.responses import RedirectResponse
 
 from backend.app.models.user import UserModel
-from backend.classes.ton_wallet_manager import ton_manager
+from backend.classes.ton_wallet_manager import ton_wallet_manager
 from backend.config import config
 from backend.database.repo.user import user_repo
 
@@ -18,7 +18,7 @@ wallet_setup_router = APIRouter(
 async def get_wallet_setup(request: Request, user_model: UserModel):
 
     # create TON wallet (Oh no that sync!!!)
-    wallet_model = ton_manager.create_wallet()
+    wallet_model = ton_wallet_manager.create_wallet()
 
     # db entry
     await user_repo.create_user(

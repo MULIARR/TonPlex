@@ -12,7 +12,7 @@
 
     <header class="header-container">
         <p>Interface: <span style="color: #0088cd">{{wallet_data['interface']}}</span></p>
-        <div id="get-phrase">
+        <div class="get-phrase" id="open-bottom-sheet-seed-phrase">
             <p>Seed Phrase</p>
         </div>
     </header>
@@ -73,7 +73,7 @@
                 {{wallet_data['address']}}
             </div>
             <div class="button-container">
-                <button class="copy-button" onclick="copyToClipboard()" data-address="{{wallet_data['address']}}">Copy Address</button>
+                <button class="copy-address-button" onclick="copyToClipboardAddress()" data-address="{{wallet_data['address']}}">Copy Address</button>
             </div>
         </div>
     </div>
@@ -90,7 +90,7 @@
                 <input type="text" name="address" placeholder="Address">
                 <input type="text" name="memo" placeholder="Memo (Optional)">
                 <div class="form-button-container">
-                    <button type="submit" class="submit-button">Send</button>
+                    <button type="submit" class="submit-button">Confirm</button>
                     <button type="reset" class="reset-button">Clear</button>
                 </div>
             </form>
@@ -98,15 +98,64 @@
         </div>
     </div>
 
+    <div id="bottom-sheet-seed-phrase" class="bottom-sheet">
+        <span class="close">&times;</span>
+        <div class="bottom-sheet-content">
+            <img height="auto" width="130" src="/static/img/Key.png" alt="Inbox">
+            <h1>Seed phrase</h1>
+            <p>Do not share your Seed Phrase with anyone, it is needed to access your wallet.</p>
+
+            <div class="mnemonic-container">
+                <ol class="column">
+                    {% for i in range(0, 12) %}
+                    <li>{{ wallet_data['mnemonics'][i] }}</li>
+                    {% endfor %}
+                </ol>
+                <ol class="column" start="13">
+                    {% for i in range(12, 24) %}
+                    <li>{{ wallet_data['mnemonics'][i] }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+
+            <div class="button-container">
+                <button class="copy-seed-phrase-button" onclick="copyToClipboardSeedPhrase()" data-phrase="{{ wallet_data['mnemonics'] | join(' ') }}">Copy Phrase</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="transaction-status" class="bottom-sheet">
+        <span class="close">&times;</span>
+        <div class="bottom-sheet-content">
+            <h1 id="transaction-status-message">Processing Transaction</h1>
+        </div>
+    </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const openBtnReceive = document.getElementById('open-bottom-sheet-receive');
-            const openBtnSend = document.getElementById('open-bottom-sheet-send');
-            const bottomSheetReceive = document.getElementById('bottom-sheet-receive');
+            const sendForm = document.getElementById('send-form');
             const bottomSheetSend = document.getElementById('bottom-sheet-send');
+            const transactionStatus = document.getElementById('transaction-status');
+            const transactionStatusMessage = document.getElementById('transaction-status-message');
             const overlay = document.getElementById('overlay');
             const closeBtns = document.querySelectorAll('.close');
+
+            const openBtnReceive = document.getElementById('open-bottom-sheet-receive');
+            const openBtnSend = document.getElementById('open-bottom-sheet-send');
+            const openBtnSeedPhrase = document.getElementById('open-bottom-sheet-seed-phrase');
+
+            const bottomSheetReceive = document.getElementById('bottom-sheet-receive');
+            const bottomSheetSeedPhrase = document.getElementById('bottom-sheet-seed-phrase');
+
+            function closeModal(modal) {
+                modal.classList.add('hide');
+                setTimeout(() => {
+                    modal.classList.remove('show');
+                    modal.classList.remove('hide');
+                    overlay.style.display = 'none';
+                }, 500);
+            }
 
             openBtnReceive.addEventListener('click', function() {
                 bottomSheetReceive.classList.add('show');
@@ -118,26 +167,85 @@
                 overlay.style.display = 'block';
             });
 
+            openBtnSeedPhrase.addEventListener('click', function() {
+                bottomSheetSeedPhrase.classList.add('show');
+                overlay.style.display = 'block';
+            });
+
             closeBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    bottomSheetReceive.classList.remove('show');
-                    bottomSheetSend.classList.remove('show');
-                    overlay.style.display = 'none';
+                    if (btn.closest('.bottom-sheet')) {
+                        closeModal(btn.closest('.bottom-sheet'));
+                    }
                 });
             });
 
             window.addEventListener('click', function(event) {
                 if (event.target === overlay) {
-                    bottomSheetReceive.classList.remove('show');
-                    bottomSheetSend.classList.remove('show');
-                    overlay.style.display = 'none';
+                    closeModal(bottomSheetReceive);
+                    closeModal(bottomSheetSend);
+                    closeModal(bottomSheetSeedPhrase);
+                    closeModal(transactionStatus);
                 }
+            });
+
+
+            sendForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const amount = parseFloat(sendForm.elements['amount'].value);
+                const address = sendForm.elements['address'].value.trim();
+                const memo = sendForm.elements['memo'].value.trim();
+
+                let isValid = true;
+                if (isNaN(amount) || amount <= 0) {
+                    sendForm.elements['amount'].style.border = '2px solid #dc3545';
+                    isValid = false;
+                } else {
+                    sendForm.elements['amount'].style.border = '2px solid seagreen';
+                }
+                if (address.length <= 20 || /\s/.test(address)) {
+                    sendForm.elements['address'].style.border = '2px solid #dc3545';
+                    isValid = false;
+                } else {
+                    sendForm.elements['address'].style.border = '2px solid seagreen';
+                }
+
+                if (!isValid) {
+                    return;
+                }
+
+                closeModal(bottomSheetSend);
+
+                transactionStatusMessage.innerText = 'Processing Transaction';
+                transactionStatus.classList.add('show');
+                overlay.style.display = 'block';
+
+                setTimeout(() => {
+                    transactionStatusMessage.innerText = 'Transaction Successful';
+                    setTimeout(() => {
+                        closeModal(transactionStatus);
+                    }, 3000);
+                }, 2000);
             });
         });
 
+        function copyToClipboardSeedPhrase() {
+            const button = document.querySelector('.copy-seed-phrase-button');
+            const textToCopy = button.getAttribute('data-phrase');
 
-        function copyToClipboard() {
-            const button = document.querySelector('.copy-button');
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    button.innerText = 'Copied';
+                    button.style.border = '2px solid seagreen';
+                })
+                .catch(err => {
+                    console.error('Could not copy seed-phrase: ', err);
+                });
+        }
+
+        function copyToClipboardAddress() {
+            const button = document.querySelector('.copy-address-button');
             const addressToCopy = button.getAttribute('data-address');
 
             navigator.clipboard.writeText(addressToCopy)

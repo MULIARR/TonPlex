@@ -14,6 +14,8 @@ logger = logging.getLogger(__name__)
 
 
 class TonWallet(BaseModel):
+    address: str
+    shorten_address: str
     mnemonics: list[str]
     public_key: bytes
     private_key: bytes
@@ -36,8 +38,8 @@ class TONWalletManager:
     async def init_client(self):
         await self.client.init()
 
-    @staticmethod
     def create_wallet(
+            self,
             version=WalletVersionEnum.v4r2,
             workchain=0
     ) -> TonWallet:
@@ -46,7 +48,12 @@ class TONWalletManager:
             workchain=workchain
         )
 
+        # get user friendly wallet address
+        address = wallet.address.to_string(True, True, True)
+
         return TonWallet(
+            address=address,
+            shorten_address=self.get_shorten_address(address),
             mnemonics=mnemonics,
             public_key=public_key,
             private_key=private_key,
@@ -54,7 +61,15 @@ class TONWalletManager:
         )
 
     @staticmethod
+    def get_shorten_address(address: str, front_chars=6, back_chars=6, ellipsis_='…') -> str:
+        """
+        Returns:
+        str: The shortened address.
+        """
+        return address[:front_chars] + ellipsis_ + address[-back_chars:]
+
     def get_wallet(
+            self,
             mnemonics: list[str],
             version=WalletVersionEnum.v4r2,
             workchain=0
@@ -65,7 +80,12 @@ class TONWalletManager:
             workchain=workchain
         )
 
+        # get user friendly wallet address
+        address = wallet.address.to_string(True, True, True)
+
         return TonWallet(
+            address=address,
+            shorten_address=self.get_shorten_address(address),
             mnemonics=mnemonics,
             public_key=public_key,
             private_key=private_key,
@@ -143,7 +163,7 @@ class TONWalletManager:
 
 
 # lazy init
-ton_manager = TONWalletManager()
+ton_wallet_manager = TONWalletManager()
 
 
 # mnemonics = ['mirror', 'shoot', 'mercy', 'share', 'step', 'picture', 'grant', 'promote', 'stock', 'absent', 'picnic', 'vacuum', 'apple', 'else', 'promote', 'income', 'slot', 'behave', 'shock', 'champion', 'mystery', 'father', 'stone', 'media']
@@ -152,12 +172,12 @@ mnemonics = ['loyal', 'tiny', 'furnace', 'hip', 'such', 'curtain', 'ensure', 'fr
 
 
 async def main():
-    wallet_model = ton_manager.get_wallet(mnemonics=mnemonics)
+    wallet_model = ton_wallet_manager.get_wallet(mnemonics=mnemonics)
     print(wallet_model.wallet.address.to_string(True, True, True))
-    print(await ton_manager.transfer(wallet_model.wallet,
+    print(await ton_wallet_manager.transfer(wallet_model.wallet,
                                      'UQB1wRfCgskWK_vyb--_oVnynDa9QLV5x6aNxNqtTfXxuaJK',
-                                     0.1
-                                     ))
+                                            0.1
+                                            ))
     # print(await ton_manager.get_seqno(wallet_model.wallet))
     # print(await ton_manager.deploy_wallet(wallet_model.wallet))
 
