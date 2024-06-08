@@ -136,7 +136,12 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const tg = window.Telegram.WebApp;
+
             const sendForm = document.getElementById('send-form');
+            const inputs = sendForm.querySelectorAll('input');
+            const indentForKeyboard = document.querySelector('.indent-for-keyboard');
+
             const bottomSheetSend = document.getElementById('bottom-sheet-send');
             const transactionStatus = document.getElementById('transaction-status');
             const transactionStatusMessage = document.getElementById('transaction-status-message');
@@ -150,6 +155,29 @@
             const bottomSheetReceive = document.getElementById('bottom-sheet-receive');
             const bottomSheetSeedPhrase = document.getElementById('bottom-sheet-seed-phrase');
 
+
+            function handleKeyboardShow() {
+                const keyboardHeight = tg.viewportHeight - tg.viewportStableHeight;
+                indentForKeyboard.style.paddingBottom = `${keyboardHeight}px`;
+            }
+
+            function handleKeyboardHide() {
+                indentForKeyboard.style.paddingBottom = '0';
+            }
+
+            inputs.forEach(input => {
+                input.addEventListener('focus', handleKeyboardShow);
+                input.addEventListener('blur', handleKeyboardHide);
+            });
+
+            window.addEventListener('resize', function() {
+                if (window.innerHeight < document.documentElement.clientHeight) {
+                    handleKeyboardShow();
+                } else {
+                    handleKeyboardHide();
+                }
+            });
+            
             function closeModal(modal) {
                 modal.classList.add('hide');
                 setTimeout(() => {
@@ -192,7 +220,6 @@
             });
 
             function clearBorders() {
-                const inputs = sendForm.querySelectorAll('input');
                 inputs.forEach(input => {
                     input.style.border = '2px solid transparent';
                 });

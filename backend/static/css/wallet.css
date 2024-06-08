@@ -390,12 +390,6 @@ footer {
     padding-bottom: 0;
 }
 
-@media (max-width: 750px) {
-    input:focus ~ .indent-for-keyboard {
-        padding-bottom: 30vh;
-    }
-}
-
 .overlay {
     display: none;
     position: fixed;
