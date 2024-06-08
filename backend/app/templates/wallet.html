@@ -95,6 +95,8 @@
                 </div>
             </form>
 
+            <div class="indent-for-keyboard"></div>
+
         </div>
     </div>
 
@@ -127,7 +129,7 @@
     <div id="transaction-status" class="bottom-sheet">
         <span class="close">&times;</span>
         <div class="bottom-sheet-content">
-            <h1 id="transaction-status-message">Processing Transaction</h1>
+            <p id="transaction-status-message">Processing Transaction...</p>
         </div>
     </div>
 
@@ -189,6 +191,13 @@
                 }
             });
 
+            function clearBorders() {
+                const inputs = sendForm.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.style.border = '2px solid transparent';
+                });
+            }
+
 
             sendForm.addEventListener('submit', function(event) {
                 event.preventDefault();
@@ -217,12 +226,15 @@
 
                 closeModal(bottomSheetSend);
 
-                transactionStatusMessage.innerText = 'Processing Transaction';
+                sendForm.reset();
+                clearBorders();
+
+                transactionStatusMessage.innerText = 'Processing Transaction...';
                 transactionStatus.classList.add('show');
                 overlay.style.display = 'block';
 
                 setTimeout(() => {
-                    transactionStatusMessage.innerText = 'Transaction Successful';
+                    transactionStatusMessage.innerText = 'Transaction Successful!';
                     setTimeout(() => {
                         closeModal(transactionStatus);
                     }, 3000);
