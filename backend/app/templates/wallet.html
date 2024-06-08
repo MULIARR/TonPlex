@@ -7,8 +7,14 @@
 
 {% block content %}
 <div class="container">
-    <header class="header-container">
 
+    <div id="overlay" class="overlay"></div>
+
+    <header class="header-container">
+        <p>Interface: <span style="color: #0088cd">{{wallet_data['interface']}}</span></p>
+        <div id="get-phrase">
+            <p>Seed Phrase</p>
+        </div>
     </header>
     <hr>
     <div class="balance-container">
@@ -16,11 +22,11 @@
         <span>{{wallet_data['shorten_address']}}</span>
     </div>
     <div class="utility-container">
-        <div class="item" id="open-bottom-sheet">
+        <div class="item" id="open-bottom-sheet-receive">
             <img height="auto" width="45" src="/static/img/Inbox.png">
             <span>Receive</span>
         </div>
-        <div class="item">
+        <div class="item" id="open-bottom-sheet-send">
             <img height="auto" width="45" src="/static/img/Outbox.png">
             <span>Send</span>
         </div>
@@ -57,8 +63,8 @@
         </div>
     </footer>
 
-    <div id="bottom-sheet" class="bottom-sheet">
-        <span id="close-bottom-sheet" class="close">&times;</span>
+    <div id="bottom-sheet-receive" class="bottom-sheet">
+        <span class="close">&times;</span>
         <div class="bottom-sheet-content">
             <img height="auto" width="130" src="/static/img/Inbox.png" alt="Inbox">
             <h1>Receive Toncoin</h1>
@@ -72,23 +78,59 @@
         </div>
     </div>
 
+    <div id="bottom-sheet-send" class="bottom-sheet">
+        <span class="close">&times;</span>
+        <div class="bottom-sheet-content">
+            <img height="auto" width="130" src="/static/img/Outbox.png" alt="Inbox">
+            <h1>Send Toncoin</h1>
+            <p>Please fill in the required fields.</p>
+
+            <form id="send-form">
+                <input type="text" name="amount" placeholder="Amount">
+                <input type="text" name="address" placeholder="Address">
+                <input type="text" name="memo" placeholder="Memo (Optional)">
+                <div class="form-button-container">
+                    <button type="submit" class="submit-button">Send</button>
+                    <button type="reset" class="reset-button">Clear</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const openBtn = document.getElementById('open-bottom-sheet');
-            const bottomSheet = document.getElementById('bottom-sheet');
-            const closeBtn = document.getElementById('close-bottom-sheet');
+            const openBtnReceive = document.getElementById('open-bottom-sheet-receive');
+            const openBtnSend = document.getElementById('open-bottom-sheet-send');
+            const bottomSheetReceive = document.getElementById('bottom-sheet-receive');
+            const bottomSheetSend = document.getElementById('bottom-sheet-send');
+            const overlay = document.getElementById('overlay');
+            const closeBtns = document.querySelectorAll('.close');
 
-            openBtn.addEventListener('click', function() {
-                bottomSheet.classList.add('show');
+            openBtnReceive.addEventListener('click', function() {
+                bottomSheetReceive.classList.add('show');
+                overlay.style.display = 'block';
             });
 
-            closeBtn.addEventListener('click', function() {
-                bottomSheet.classList.remove('show');
+            openBtnSend.addEventListener('click', function() {
+                bottomSheetSend.classList.add('show');
+                overlay.style.display = 'block';
+            });
+
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    bottomSheetReceive.classList.remove('show');
+                    bottomSheetSend.classList.remove('show');
+                    overlay.style.display = 'none';
+                });
             });
 
             window.addEventListener('click', function(event) {
-                if (event.target === bottomSheet) {
-                    bottomSheet.classList.remove('show');
+                if (event.target === overlay) {
+                    bottomSheetReceive.classList.remove('show');
+                    bottomSheetSend.classList.remove('show');
+                    overlay.style.display = 'none';
                 }
             });
         });

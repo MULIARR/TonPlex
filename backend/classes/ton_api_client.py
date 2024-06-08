@@ -39,6 +39,8 @@ async def main():
     # Retrieve account information asynchronously
     account = await tonapi.get_account_balance(account=account_id)
 
+    print(account)
+
     print(account.balance.to_amount())
 
     # Print account details
