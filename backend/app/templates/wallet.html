@@ -156,6 +156,31 @@
             const bottomSheetSeedPhrase = document.getElementById('bottom-sheet-seed-phrase');
 
 
+            let startY = 0;
+            let isPulling = false;
+
+            window.addEventListener('touchstart', function(event) {
+                if (window.scrollY === 0) {
+                    startY = event.touches[0].pageY;
+                    isPulling = true;
+                }
+            });
+
+            window.addEventListener('touchmove', function(event) {
+                if (isPulling) {
+                    const currentY = event.touches[0].pageY;
+                    if (currentY - startY > 35) {
+                        location.reload();
+                        isPulling = false;
+                    }
+                }
+            });
+
+            window.addEventListener('touchend', function() {
+                isPulling = false;
+            });
+
+
             const isMobile = tg.platform === 'mobile' || window.innerWidth < 600;
 
             if (isMobile) {

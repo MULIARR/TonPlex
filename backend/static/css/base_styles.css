@@ -10,6 +10,7 @@ body, html {
     padding: 0;
 
     overflow: auto;
+    overscroll-behavior-y: contain;
 
     background-color: black;
     /*background-color: #111113;*/
