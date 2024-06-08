@@ -156,28 +156,12 @@
             const bottomSheetSeedPhrase = document.getElementById('bottom-sheet-seed-phrase');
 
 
-            function handleKeyboardShow() {
-                const keyboardHeight = tg.viewportHeight - tg.viewportStableHeight;
-                indentForKeyboard.style.paddingBottom = `${keyboardHeight}px`;
+            const isMobile = tg.platform === 'mobile' || window.innerWidth < 600;
+
+            if (isMobile) {
+                indentForKeyboard.style.paddingBottom = '40vh';
             }
 
-            function handleKeyboardHide() {
-                indentForKeyboard.style.paddingBottom = '0';
-            }
-
-            inputs.forEach(input => {
-                input.addEventListener('focus', handleKeyboardShow);
-                input.addEventListener('blur', handleKeyboardHide);
-            });
-
-            window.addEventListener('resize', function() {
-                if (window.innerHeight < document.documentElement.clientHeight) {
-                    handleKeyboardShow();
-                } else {
-                    handleKeyboardHide();
-                }
-            });
-            
             function closeModal(modal) {
                 modal.classList.add('hide');
                 setTimeout(() => {
