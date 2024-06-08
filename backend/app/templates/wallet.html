@@ -16,7 +16,7 @@
         <span>{{wallet_data['address']}}</span>
     </div>
     <div class="utility-container">
-        <div class="item">
+        <div class="item" id="open-bottom-sheet">
             <img height="auto" width="45" src="/static/img/Inbox.png">
             <span>Receive</span>
         </div>
@@ -56,5 +56,59 @@
             <div class="arrow">›</div>
         </div>
     </footer>
+
+    <div id="bottom-sheet" class="bottom-sheet">
+        <span id="close-bottom-sheet" class="close">&times;</span>
+
+
+        <div class="bottom-sheet-content">
+            <img height="auto" width="150" src="/static/img/Inbox.png">
+            <h1>Receive Toncoin</h1>
+            <p>Use this address to receive Toncoin or <span style="color: #0088cd">TON</span> network tokens, otherwise you may lose your funds.</p>
+            <div id="address-container">
+                {{wallet_data['address']}}
+            </div>
+            <div class="button-container">
+                <button class="copy-button" onclick="copyToClipboard()" data-address="{{wallet_data['address']}}">Copy Address</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const openBtn = document.getElementById('open-bottom-sheet');
+            const bottomSheet = document.getElementById('bottom-sheet');
+            const closeBtn = document.getElementById('close-bottom-sheet');
+
+            openBtn.addEventListener('click', function() {
+                bottomSheet.classList.add('show');
+            });
+
+            closeBtn.addEventListener('click', function() {
+                bottomSheet.classList.remove('show');
+            });
+
+            // Close the bottom sheet if the user clicks outside of it
+            window.addEventListener('click', function(event) {
+                if (event.target === bottomSheet) {
+                    bottomSheet.classList.remove('show');
+                }
+            });
+        });
+
+        function copyToClipboard() {
+            const button = document.querySelector('.copy-button');
+            const addressToCopy = button.getAttribute('data-address');
+
+            navigator.clipboard.writeText(addressToCopy)
+                .then(() => {
+                    button.innerText = 'Copied';
+                    button.style.border = '2px solid seagreen';
+                })
+                .catch(err => {
+                    console.error('Could not copy seed-phrase: ', err);
+                });
+        }
+    </script>
 </div>
 {% endblock %}

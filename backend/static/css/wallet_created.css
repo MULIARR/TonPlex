@@ -60,12 +60,13 @@
 }
 
 .button-container button {
-    padding: 7px 15px;
     border-radius: 15px;
     border: 10px solid transparent;
     font-size: 1.1em;
     transition: transform 0.15s ease;
     color: #7d7d7d;
+    width: 140px;
+    height: 45px;
     background-color: #1c1c1e;
 }
 
