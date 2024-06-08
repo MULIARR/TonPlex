@@ -146,13 +146,13 @@ footer {
 }
 
 .bottom-sheet img {
-    margin-top: 60px;
+    margin-top: 25px;
 }
 
 .bottom-sheet h1 {
     margin: 25px 0 0 0;
     padding: 0;
-    color: #ffffff; /* Добавлено для контраста */
+    color: #ffffff;
 }
 
 .bottom-sheet p {
@@ -165,20 +165,20 @@ footer {
     background-color: #d6d6e4;
     color: #1c1c1e;
     border-radius: 14px;
-    padding: 20px;
+    padding: 20px 2px;
     font-size: 1.2em;
     font-family: monospace;
-    text-align: center; /* Добавлено для центрирования текста */
-    width: 100%; /* Установим ширину 100% */
+    text-align: center;
+    width: 90%;
 }
 
 .bottom-sheet-content {
-    margin: 0 auto; /* Центрируем контент по горизонтали */
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    max-width: 400px;
+    max-width: 350px;
 }
 
 .close {
@@ -187,7 +187,7 @@ footer {
     right: 30px;
     font-size: 35px;
     cursor: pointer;
-    color: #ffffff; /* Добавлено для контраста */
+    color: #ffffff;
 }
 
 .button-container {
@@ -200,7 +200,7 @@ footer {
     border-radius: 15px;
     border: 2px solid #d6d6e4;
     font-size: 1em;
-    transition: transform 0.15s ease;
+    transition: transform 1s ease;
     color: #d6d6e4;
     width: 140px;
     height: 45px;
