@@ -1,0 +1,96 @@
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.logo {
+    margin-top: 50px;
+}
+
+.logo img {
+    max-width: 100%;
+    height: auto;
+}
+
+#topic-text div {
+    margin: 10px 0;
+    font-size: 2.5em;
+}
+
+#topic-text p {
+    max-width: 300px;
+    margin: 0 auto;
+    line-height: 1.2em;
+    color: #7d7d7d;
+    font-size: 1.2em;
+}
+
+.mnemonic-input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.form-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 600px;
+}
+
+.form-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    background-color: #1c1c1e;
+    border-radius: 14px;
+    padding: 13px 10px;
+}
+
+.form-group label {
+    color: #7d7d7d;
+    margin-right: 10px;
+}
+
+.form-group input {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: #ecf6ff;
+    width: 100%;
+}
+
+.import-button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+#import-wallet-button {
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: 2px solid transparent;
+    padding: 13px 35px;
+    font-size: 1rem;
+    border-radius: 16px;
+}
+
+.indent-for-keyboard {
+    text-align: center;
+}

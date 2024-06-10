@@ -11,15 +11,15 @@
     <div id="overlay" class="overlay"></div>
 
     <header class="header-container">
-        <p>Interface: <span style="color: #0088cd">{{wallet_data['interface']}}</span></p>
+        <p>Interface: <span style="color: #0088cd">{{ wallet_data.interface }}</span></p>
         <div class="get-phrase" id="open-bottom-sheet-seed-phrase">
             <p>Seed Phrase</p>
         </div>
     </header>
     <hr>
     <div class="balance-container">
-        <p>{{wallet_data['balance']}} $</p>
-        <span>{{wallet_data['shorten_address']}}</span>
+        <p>{{ wallet_data.total_balance }} $</p>
+        <span>{{ wallet_data.wallet.shorten_address }}</span>
     </div>
     <div class="utility-container">
         <div class="item" id="open-bottom-sheet-receive">
@@ -32,27 +32,28 @@
         </div>
     </div>
     <hr>
+
     <div class="assets-container">
 <!--        <p style="font-size: 1.2rem; color: #7d7d7d;">Assets</p>-->
 
-
-        {% for asset in wallet_data['assets'].values() %}
+        {% for asset in wallet_data.assets %}
 
         <div class="card">
             <div class="icon">
-                <img src="/static/img/Toncoin.png">
+                <img src="{{ asset.image }}">
             </div>
             <div class="content">
-                <div class="title">{{ asset['name'] }}</div>
-                <div class="subtitle"> {{ asset['value'] }} {{ asset['symbol'] }}</div>
+                <div class="title">{{ asset.name }}</div>
+                <div class="subtitle"> {{ asset.balance }} {{ asset.symbol }}  <span class="diff_24h">{{ asset.diff_24h }}</span></div>
             </div>
-            <div class="price">{{ asset['price'] }} $</div>
+            <div class="price">{{ asset.balance_in_usd }} $</div>
         </div>
         {% endfor %}
     </div>
+
     <hr>
     <footer>
-        <div class="card">
+        <div class="card" id="open-bottom-sheet-transactions">
             <div class="icon">
                 <img src="/static/img/Folder.png">
             </div>
@@ -70,10 +71,10 @@
             <h1>Receive Toncoin</h1>
             <p>Use this address to receive Toncoin or <span style="color: #0088cd">TON</span> network tokens, otherwise you may lose your funds.</p>
             <div id="address-container">
-                {{wallet_data['address']}}
+                {{ wallet_data.wallet.shorten_address }}
             </div>
             <div class="button-container">
-                <button class="copy-address-button" onclick="copyToClipboardAddress()" data-address="{{wallet_data['address']}}">Copy Address</button>
+                <button class="copy-address-button" onclick="copyToClipboardAddress()" data-address="{{ wallet_data.wallet.address }}">Copy Address</button>
             </div>
         </div>
     </div>
@@ -110,12 +111,12 @@
             <div class="mnemonic-container">
                 <ol class="column">
                     {% for i in range(0, 12) %}
-                    <li>{{ wallet_data['mnemonics'][i] }}</li>
+                    <li>{{ wallet_data.wallet.mnemonics[i] }}</li>
                     {% endfor %}
                 </ol>
                 <ol class="column" start="13">
                     {% for i in range(12, 24) %}
-                    <li>{{ wallet_data['mnemonics'][i] }}</li>
+                    <li>{{ wallet_data.wallet.mnemonics[i] }}</li>
                     {% endfor %}
                 </ol>
             </div>
@@ -129,7 +130,33 @@
     <div id="transaction-status" class="bottom-sheet">
         <span class="close">&times;</span>
         <div class="bottom-sheet-content">
-            <p id="transaction-status-message">Processing Transaction...</p>
+            <h2 id="transaction-status-message">Processing Transaction...</h2>
+        </div>
+    </div>
+
+    <div id="bottom-sheet-transactions" class="bottom-sheet">
+        <span class="close">&times;</span>
+        <div class="bottom-sheet-content">
+            <img height="auto" width="130" src="/static/img/Folder.png" alt="Inbox">
+            <h2>Transactions History</h2>
+            <p>Click on a transaction to open it in <span style="color: #0088cd">Tonviewer</span>.</p>
+
+            {% for transaction in transactions_data.transactions %}
+
+            <a href="javascript:Telegram.WebApp.openLink('{{ transaction.tonviewer_link }}',{try_instant_view:true});"
+               style="text-decoration: none; color: inherit;">
+                <div class="transaction-card">
+                    <div class="transaction-icon">
+                        <img src="{{ transaction.image }}">
+                    </div>
+                    <div class="content">
+                        <div class="transaction-type">{{ transaction.type }}</div>
+                    </div>
+                    <div>{{ transaction.value }}</div>
+                </div>
+            </a>
+            {% endfor %}
+
         </div>
     </div>
 
@@ -137,6 +164,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const tg = window.Telegram.WebApp;
+
+            const elements = document.querySelectorAll('.diff_24h');
 
             const sendForm = document.getElementById('send-form');
             const inputs = sendForm.querySelectorAll('input');
@@ -148,12 +177,30 @@
             const overlay = document.getElementById('overlay');
             const closeBtns = document.querySelectorAll('.close');
 
+            const openBtnTransactions = document.getElementById('open-bottom-sheet-transactions');
             const openBtnReceive = document.getElementById('open-bottom-sheet-receive');
             const openBtnSend = document.getElementById('open-bottom-sheet-send');
             const openBtnSeedPhrase = document.getElementById('open-bottom-sheet-seed-phrase');
 
             const bottomSheetReceive = document.getElementById('bottom-sheet-receive');
             const bottomSheetSeedPhrase = document.getElementById('bottom-sheet-seed-phrase');
+
+            const bottomSheetTransactions = document.getElementById('bottom-sheet-transactions');
+
+
+            function updateColors() {
+                elements.forEach(function(element) {
+                    const text = element.textContent.trim();
+
+                    if (text.startsWith('+')) {
+                        element.style.color = 'seagreen';
+                    } else {
+                        element.style.color = '#dc3545';
+                    }
+                });
+            }
+
+            updateColors();
 
 
             let startY = 0;
@@ -169,7 +216,7 @@
             window.addEventListener('touchmove', function(event) {
                 if (isPulling) {
                     const currentY = event.touches[0].pageY;
-                    if (currentY - startY > 35) {
+                    if (currentY - startY > 65) {
                         location.reload();
                         isPulling = false;
                     }
@@ -211,6 +258,11 @@
                 overlay.style.display = 'block';
             });
 
+            openBtnTransactions.addEventListener('click', function() {
+                bottomSheetTransactions.classList.add('show');
+                overlay.style.display = 'block';
+            });
+
             closeBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     if (btn.closest('.bottom-sheet')) {
@@ -225,6 +277,7 @@
                     closeModal(bottomSheetSend);
                     closeModal(bottomSheetSeedPhrase);
                     closeModal(transactionStatus);
+                    closeModal(bottomSheetTransactions);
                 }
             });
 

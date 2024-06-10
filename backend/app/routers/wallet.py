@@ -14,37 +14,24 @@ wallet_router = APIRouter(
 
 
 @wallet_router.get("/")
-async def get_wallet(request: Request, user_id: int):
-    # # get user
-    # user_model = await user_repo.get_user(user_id)
-    #
-    # # get user's wallet
-    # wallet_model = ton_wallet_manager.get_wallet(user_model.mnemonics)
-    #
-    # # get wallet data
-    # wallet_data = await tonapi.get_wallet_data(wallet_model.address)
+async def wallet(request: Request, user_id: int):
+    # get user
+    user_model = await user_repo.get_user(user_id)
 
-    wallet_data = {
-        "balance": 90.97,
-        "address": "Uia78HFjnjwe892JIJEi_GSybq8",
-        "shorten_address": "Uia78...GSybq8",
-        "interface": "wallet_v4r2",
-        "mnemonics": ['loyal', 'tiny', 'furnace', 'hip', 'such', 'curtain', 'ensure', 'fresh', 'rely', 'budget', 'rocket', 'system', 'suspect', 'confirm', 'hedgehog', 'okay', 'fuel', 'topic', 'force', 'spoon', 'stool', 'sunset', 'display', 'review'],
-        "assets": {
-            "TON": {
-                "symbol": "TON",
-                "name": "Toncoin",
-                "value": 5,
-                "price": 45.5,
-                "img": None
-            }
-        }
-    }
+    # get user's wallet
+    wallet_model = ton_wallet_manager.get_wallet(user_model.mnemonic)
+
+    # get wallet data
+    wallet_data = await tonapi.get_wallet_assets_data(wallet_model)
+
+    # get wallet transactions
+    transactions_data = await tonapi.get_transactions(wallet_model.address)
 
     return templates.TemplateResponse(
         "wallet.html",
         {
             "request": request,
-            "wallet_data": wallet_data
+            "wallet_data": wallet_data,
+            "transactions_data": transactions_data
         }
     )

@@ -3,26 +3,16 @@ import logging
 from typing import Optional
 
 import requests
-from pydantic import BaseModel
 from pytonlib import TonlibClient, BlockNotFound, ExternalMessageNotAccepted, TonlibNoResponse
 from tonsdk.contract.wallet import Wallets, WalletVersionEnum, WalletContract
+from tonsdk.crypto.exceptions import InvalidMnemonicsError
 from tonsdk.utils import to_nano
 
 from pathlib import Path
 
+from backend.app.models.wallet import TonWalletModel
+
 logger = logging.getLogger(__name__)
-
-
-class TonWallet(BaseModel):
-    address: str
-    shorten_address: str
-    mnemonics: list[str]
-    public_key: bytes
-    private_key: bytes
-    wallet: WalletContract
-
-    class Config:
-        arbitrary_types_allowed = True
 
 
 class TONWalletManager:
@@ -42,7 +32,7 @@ class TONWalletManager:
             self,
             version=WalletVersionEnum.v4r2,
             workchain=0
-    ) -> TonWallet:
+    ) -> TonWalletModel:
         mnemonics, public_key, private_key, wallet = Wallets.create(
             version=version,
             workchain=workchain
@@ -51,7 +41,7 @@ class TONWalletManager:
         # get user friendly wallet address
         address = wallet.address.to_string(True, True, True)
 
-        return TonWallet(
+        return TonWalletModel(
             address=address,
             shorten_address=self.get_shorten_address(address),
             mnemonics=mnemonics,
@@ -73,17 +63,20 @@ class TONWalletManager:
             mnemonics: list[str],
             version=WalletVersionEnum.v4r2,
             workchain=0
-    ) -> TonWallet:
-        mnemonics, public_key, private_key, wallet = Wallets.from_mnemonics(
-            mnemonics=mnemonics,
-            version=version,
-            workchain=workchain
-        )
+    ) -> TonWalletModel:
+        try:
+            mnemonics, public_key, private_key, wallet = Wallets.from_mnemonics(
+                mnemonics=mnemonics,
+                version=version,
+                workchain=workchain
+            )
+        except InvalidMnemonicsError:
+            return False
 
         # get user friendly wallet address
         address = wallet.address.to_string(True, True, True)
 
-        return TonWallet(
+        return TonWalletModel(
             address=address,
             shorten_address=self.get_shorten_address(address),
             mnemonics=mnemonics,
@@ -164,31 +157,3 @@ class TONWalletManager:
 
 # lazy init
 ton_wallet_manager = TONWalletManager()
-
-
-# mnemonics = ['mirror', 'shoot', 'mercy', 'share', 'step', 'picture', 'grant', 'promote', 'stock', 'absent', 'picnic', 'vacuum', 'apple', 'else', 'promote', 'income', 'slot', 'behave', 'shock', 'champion', 'mystery', 'father', 'stone', 'media']
-
-mnemonics = ['loyal', 'tiny', 'furnace', 'hip', 'such', 'curtain', 'ensure', 'fresh', 'rely', 'budget', 'rocket', 'system', 'suspect', 'confirm', 'hedgehog', 'okay', 'fuel', 'topic', 'force', 'spoon', 'stool', 'sunset', 'display', 'review']
-
-
-async def main():
-    wallet_model = ton_wallet_manager.get_wallet(mnemonics=mnemonics)
-    print(wallet_model.wallet.address.to_string(True, True, True))
-    print(await ton_wallet_manager.transfer(wallet_model.wallet,
-                                     'UQB1wRfCgskWK_vyb--_oVnynDa9QLV5x6aNxNqtTfXxuaJK',
-                                            0.1
-                                            ))
-    # print(await ton_manager.get_seqno(wallet_model.wallet))
-    # print(await ton_manager.deploy_wallet(wallet_model.wallet))
-
-    # await ton_manager.deploy_wallet(wallet_model.wallet)ddd
-
-
-# asyncio.get_event_loop().run_until_complete(main())
-
-
-# mnemonics = ['loyal', 'tiny', 'furnace', 'hip', 'such', 'curtain', 'ensure', 'fresh', 'rely', 'budget', 'rocket', 'system', 'suspect', 'confirm', 'hedgehog', 'okay', 'fuel', 'topic', 'force', 'spoon', 'stool', 'sunset', 'display', 'review']
-# public_key = b',\xe2\xc1*;\xa99\xe5\x83,\xf7S\xcf\xcb\x7fl\xb9\xfaa\xb6\xa50Qe\xac\xacnf0\x0bFa'
-# private_key = b'\x907^\xe50\xa2\xa0\x7f*\x1fG.\xee\xaf\xde\xbb\xe2*\x93\xc1\xcd\xb4\xfc\xab\xff\x8c<\x7fe\xc1P\xe1,\xe2\xc1*;\xa99\xe5\x83,\xf7S\xcf\xcb\x7fl\xb9\xfaa\xb6\xa50Qe\xac\xacnf0\x0bFa'
-
-

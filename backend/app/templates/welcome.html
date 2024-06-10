@@ -25,16 +25,7 @@
         const tg = window.Telegram.WebApp;
 
         document.getElementById('create-wallet').addEventListener('click', function() {
-            // const userModel = tg.initDataUnsafe.user
-
-            const userModel = {
-                'allows_write_to_pm': true,
-                'first_name': 'Dania',
-                'id': 9090,
-                'language_code': 'en',
-                'last_name': 'muliar',
-                'username': 'yamuliar',
-            }
+            const userModel = tg.initDataUnsafe.user
 
             fetch('/wallet_setup/create', {
                 method: 'POST',
@@ -53,6 +44,10 @@
                     }
                 })
                 .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('import-wallet').addEventListener('click', function() {
+            window.location.href = '/wallet_setup/import';
         });
     </script>
 
