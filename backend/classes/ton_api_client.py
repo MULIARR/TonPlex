@@ -23,6 +23,8 @@ class AsyncTONApiClient:
         account_data = await self.get_account_info(address=wallet.address)
         ton_balance = nano_to_amount(int(account_data.balance))
 
+        print(account_data)
+
         # adding TON to the assets
         jettons_list.insert(
             0, AssetModel(
@@ -37,11 +39,12 @@ class AsyncTONApiClient:
         jettons_list = await self.get_rates_for_jettons_list(jettons_list)
 
         total_balance = sum(jetton.balance_in_usd for jetton in jettons_list)
+        interface = account_data.interfaces[0] if account_data.interfaces else 'Undefined'
 
         return TonWalletAssetsDataModel(
             wallet=wallet,
             total_balance=total_balance,
-            interface=account_data.interfaces[0],
+            interface=interface,
             assets=jettons_list
         )
 
