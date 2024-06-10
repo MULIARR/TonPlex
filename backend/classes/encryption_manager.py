@@ -1,6 +1,4 @@
 from cryptography.fernet import Fernet
-
-from backend.classes.ton_wallet_manager import mnemonics
 from backend.config import config
 
 
