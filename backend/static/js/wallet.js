@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
         clearBorders();
 
         const transactionModel = {
-            'user_id': 6645125297, // tg.initDataUnsafe.user.id,
+            'user_id': tg.initDataUnsafe.user.id,
             'amount': amount,
             'to_address': address,
             'memo': memo
