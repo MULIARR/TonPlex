@@ -13,7 +13,7 @@ welcome_router = APIRouter()
 @welcome_router.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     return templates.TemplateResponse(
-        "index.html",
+        "redirect.html",
         {
             "request": request
         }
