@@ -118,9 +118,9 @@ app = create_app(config)
 
 async def start_app():
     port = int(os.environ.get("PORT", 8005))  # Railway port
-    # config = uvicorn.Config(app, host="0.0.0.0", port=port, log_level="info")
+    config = uvicorn.Config(app, host="0.0.0.0", port=port, log_level="info")
 
-    config = uvicorn.Config(app, port=8005, log_level="info")
+    # config = uvicorn.Config(app, port=8005, log_level="info")
     server = uvicorn.Server(config)
 
     await server.serve()
