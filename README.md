@@ -1,4 +1,4 @@
-![banner](https://github.com/MULIARR/TonPlex/assets/128001550/b4caf6e5-154c-4c65-8fd7-e3eb26bdc0ea)
+![banner](https://github.com/MULIARR/TonPlex/assets/128001550/f685b2cb-48c5-41af-834b-35ad35c7bded)
 
 # TonPlex
 Noncustodial crypto wallet of the The Open Network (TON) in the form of a MiniApp in Telegram. 
