@@ -2,10 +2,12 @@ from typing import Union, Optional
 
 from pydantic import BaseModel
 from tonsdk.contract.wallet import WalletContract
+from tonsdk.utils import Address
 
 
 class TonWalletModel(BaseModel):
     address: str
+    address_model: Address
     shorten_address: str
     mnemonics: list[str]
     public_key: bytes
@@ -36,6 +38,7 @@ class TonWalletAssetsDataModel(BaseModel):
     wallet: TonWalletModel
     total_balance: float
     interface: str
+    status: str
     assets: list[AssetModel]
 
     def __init__(self, **data):

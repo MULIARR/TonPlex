@@ -318,16 +318,36 @@
                 sendForm.reset();
                 clearBorders();
 
-                transactionStatusMessage.innerText = 'Processing Transaction...';
+                const transactionModel = {
+                    'user_id': 6645125297, // tg.initDataUnsafe.user.id,
+                    'amount': amount,
+                    'to_address': address,
+                    'memo': memo
+                }
+
+                transactionStatusMessage.innerText = 'Processing...';
                 transactionStatus.classList.add('show');
                 overlay.style.display = 'block';
 
-                setTimeout(() => {
-                    transactionStatusMessage.innerText = 'Transaction Successful!';
-                    setTimeout(() => {
-                        closeModal(transactionStatus);
-                    }, 3000);
-                }, 2000);
+                fetch('/wallet/send_transaction', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(transactionModel)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            transactionStatusMessage.innerText = 'Toncoin sent successfully!';
+                        } else {
+                            transactionStatusMessage.innerText = 'Sending error.';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+
             });
         });
 

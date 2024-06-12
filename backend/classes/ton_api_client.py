@@ -10,6 +10,7 @@ from backend.app.models.transactions import TransactionsModel, TransactionModel
 from backend.app.models.wallet import TonWalletAssetsDataModel, TonWalletModel, AssetModel
 from backend.config import config
 from backend.constants import CryptoLogo, SmartContractAddresses
+from backend.utils.shorten_address import get_shorten_address
 
 
 class AsyncTONApiClient:
@@ -17,13 +18,10 @@ class AsyncTONApiClient:
         self.tonapi_client = AsyncTonapi(api_key=tonapi_key)
 
     async def get_wallet_assets_data(self, wallet: TonWalletModel) -> TonWalletAssetsDataModel:
-
         jettons_list = await self.get_jettons(address=wallet.address)
 
         account_data = await self.get_account_info(address=wallet.address)
         ton_balance = nano_to_amount(int(account_data.balance))
-
-        print(account_data)
 
         # adding TON to the assets
         jettons_list.insert(
@@ -41,10 +39,20 @@ class AsyncTONApiClient:
         total_balance = sum(jetton.balance_in_usd for jetton in jettons_list)
         interface = account_data.interfaces[0] if account_data.interfaces else 'Undefined'
 
+        account_status = account_data.status
+
+        if account_status != 'active':
+            # NOTE: non-bounceable address is needed for contracts where it is important that the
+            # transaction be completed regardless of whether the recipient can accept it.
+
+            wallet.address = wallet.address_model.to_string(True, True)  # non-bounceable
+            wallet.shorten_address = get_shorten_address(wallet.address)  # TODO: maybe validate model instead
+
         return TonWalletAssetsDataModel(
             wallet=wallet,
             total_balance=total_balance,
             interface=interface,
+            status=account_status,
             assets=jettons_list
         )
 

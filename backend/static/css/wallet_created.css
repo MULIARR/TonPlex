@@ -82,6 +82,12 @@ button:focus {
     outline: none;
 }
 
+
+.indent-for-keyboard {
+    padding-bottom: 0;
+}
+
+
 @media (hover: none) and (pointer: coarse) {
     button:active {
         transform: scale(0.95);

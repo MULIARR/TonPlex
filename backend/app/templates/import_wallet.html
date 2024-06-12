@@ -46,6 +46,13 @@
     <script>
         const tg = window.Telegram.WebApp;
         const userId = tg.initDataUnsafe.user.id;
+        const indentForKeyboard = document.querySelector('.indent-for-keyboard');
+
+        const isMobile = tg.platform === 'mobile' || window.innerWidth < 600;
+
+        if (isMobile) {
+            indentForKeyboard.style.paddingBottom = '40vh';
+        }
 
         document.getElementById('import-wallet-button').addEventListener('click', function(event) {
             event.preventDefault();

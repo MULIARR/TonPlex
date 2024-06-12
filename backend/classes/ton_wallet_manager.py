@@ -1,5 +1,5 @@
-import asyncio
 import logging
+from pathlib import Path
 from typing import Optional
 
 import requests
@@ -8,9 +8,8 @@ from tonsdk.contract.wallet import Wallets, WalletVersionEnum, WalletContract
 from tonsdk.crypto.exceptions import InvalidMnemonicsError
 from tonsdk.utils import to_nano
 
-from pathlib import Path
-
 from backend.app.models.wallet import TonWalletModel
+from backend.utils.shorten_address import get_shorten_address
 
 logger = logging.getLogger(__name__)
 
@@ -28,8 +27,8 @@ class TONWalletManager:
     async def init_client(self):
         await self.client.init()
 
+    @staticmethod
     def create_wallet(
-            self,
             version=WalletVersionEnum.v4r2,
             workchain=0
     ) -> TonWalletModel:
@@ -38,12 +37,15 @@ class TONWalletManager:
             workchain=workchain
         )
 
-        # get user friendly wallet address
-        address = wallet.address.to_string(True, True, True)
+        # get user-friendly wallet address
+        # Initially, the address must be without a parameter (is_bounceable) so that it can receive tokens
+        # but at this point it's not necessary
+        user_friendly_address = wallet.address.to_string(True, True)
 
         return TonWalletModel(
-            address=address,
-            shorten_address=self.get_shorten_address(address),
+            address=user_friendly_address,
+            address_model=wallet.address,
+            shorten_address=get_shorten_address(user_friendly_address),
             mnemonics=mnemonics,
             public_key=public_key,
             private_key=private_key,
@@ -51,15 +53,7 @@ class TONWalletManager:
         )
 
     @staticmethod
-    def get_shorten_address(address: str, front_chars=6, back_chars=6, ellipsis_='…') -> str:
-        """
-        Returns:
-        str: The shortened address.
-        """
-        return address[:front_chars] + ellipsis_ + address[-back_chars:]
-
     def get_wallet(
-            self,
             mnemonics: list[str],
             version=WalletVersionEnum.v4r2,
             workchain=0
@@ -74,29 +68,32 @@ class TONWalletManager:
             return False
 
         # get user friendly wallet address
-        address = wallet.address.to_string(True, True, True)
+        user_friendly_address = wallet.address.to_string(True, True, True)  # bounceable
 
         return TonWalletModel(
-            address=address,
-            shorten_address=self.get_shorten_address(address),
+            address=user_friendly_address,
+            address_model=wallet.address,
+            shorten_address=get_shorten_address(user_friendly_address),
             mnemonics=mnemonics,
             public_key=public_key,
             private_key=private_key,
             wallet=wallet
         )
 
-    async def deploy_wallet(self, wallet: WalletContract):
+    async def deploy_wallet(self, wallet: WalletContract) -> bool:
         query = wallet.create_init_external_message()
-
         deploy_message = query['message'].to_boc(False)
 
         try:
-            await self.client.raw_send_message(deploy_message)
+            res = await self.client.raw_send_message(deploy_message)
+            if res['@type'] == 'ok':  # Example: {'@type': 'ok', '@extra': '171885.76129:0:0.17586420542'}
+                logger.info(f'Successfully deployed wallet at address: {wallet.address}')
+                return True
         except ExternalMessageNotAccepted:
-            wallet_address = wallet.address.to_string(True, True, True)
-            logger.error(f'Initial contract call failed (probably insufficient balance): {wallet_address}')
+            logger.error(f'Initial contract call failed (probably insufficient balance): {wallet.address}')
 
-            return False
+        logger.warning(f'Deploy wallet failed for address: {wallet.address}')
+        return False
 
     async def get_seqno(
             self,
@@ -142,17 +139,24 @@ class TONWalletManager:
             )
             return
 
+        amount_in_ton = to_nano(amount, 'ton')
+
         transfer_query = wallet.create_transfer_message(
             to_addr=to_address,
-            amount=to_nano(amount, 'ton'),
+            amount=amount_in_ton,
             seqno=seqno,
             payload=payload
         )
 
         transfer_message = transfer_query['message'].to_boc(False)
 
-        await self.client.raw_send_message(transfer_message)
-        return True
+        try:
+            res = await self.client.raw_send_message(transfer_message)
+            if res['@type'] == 'ok':
+                logger.info(f'The transfer ({amount_in_ton} TON) was successfully sent to the network.')
+                return True
+        except ExternalMessageNotAccepted:
+            return False
 
 
 # lazy init

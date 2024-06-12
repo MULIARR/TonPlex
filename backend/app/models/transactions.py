@@ -1,3 +1,5 @@
+from typing import Union, Optional
+
 from pydantic import BaseModel
 
 
@@ -10,3 +12,10 @@ class TransactionModel(BaseModel):
 
 class TransactionsModel(BaseModel):
     transactions: list[TransactionModel]
+
+
+class TransactionToSendModel(BaseModel):
+    user_id: int
+    amount: Union[int, float]
+    to_address: str
+    memo: Optional[str] = None
