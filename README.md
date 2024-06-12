@@ -1,9 +1,15 @@
-<img src="/backend/static/img/welcomelogo.png" width="200" height="auto">
+![banner](https://github.com/MULIARR/TonPlex/assets/128001550/b4caf6e5-154c-4c65-8fd7-e3eb26bdc0ea)
 
 # TonPlex
-Noncustodial crypto wallet of the The Open Network (TON) in the form of a MiniApp in Telegram. (Simple Web wrapper)
+Noncustodial crypto wallet of the The Open Network (TON) in the form of a MiniApp in Telegram. 
+(Simple Web wrapper, Coursework on the subject of OOP)
 
-Coursework on the subject of OOP
+# 👋🏽 Let's get acquainted
+![1](https://github.com/MULIARR/TonPlex/assets/128001550/05632b7a-62f2-4696-a452-b57a6da59582)
+
+![2](https://github.com/MULIARR/TonPlex/assets/128001550/9c36adf6-ec0c-4020-8680-188071922208)
+
+![3](https://github.com/MULIARR/TonPlex/assets/128001550/f6640209-dfd8-4c32-b16c-accbe77a147a)
 
 ## ⭐️ Features
 - Creating a wallet (including wallet initialization, interface wallet_v4r2)
@@ -13,7 +19,4 @@ Coursework on the subject of OOP
 - Sending Toncoin
 - Transaction history (Bad, very bad, needs improvement)
 
-## 🚀 Launch
-```bash
-python launcher.py
-```
+
