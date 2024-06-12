@@ -1,2 +1,0 @@
-class StartTexts:
-    START = "aaa"

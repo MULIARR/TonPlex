@@ -6,7 +6,6 @@ Noncustodial crypto wallet of the The Open Network (TON) in the form of a MiniAp
 Coursework on the subject of OOP
 
 ## ⭐️ Features
-***
 - Creating a wallet (including wallet initialization, interface wallet_v4r2)
 - Importing an existing wallet
 - View balance (including jettons)
@@ -15,7 +14,6 @@ Coursework on the subject of OOP
 - Transaction history (Bad, very bad, needs improvement)
 
 ## 🚀 Launch
-***
 ```bash
 python launcher.py
 ```
