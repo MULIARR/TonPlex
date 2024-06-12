@@ -329,7 +329,8 @@
                 transactionStatus.classList.add('show');
                 overlay.style.display = 'block';
 
-                fetch('/wallet/send_transaction', {
+                const baseUrl = window.location.origin;
+                fetch(`${baseUrl}/api/wallet/send_transaction`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

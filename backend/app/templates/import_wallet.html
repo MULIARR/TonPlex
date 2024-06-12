@@ -79,7 +79,8 @@
                     'mnemonics': mnemonics
                 };
 
-                fetch('/wallet_setup/check_mnemonics', {
+                const baseUrl = window.location.origin;
+                fetch(`${baseUrl}/api/wallet_setup/check_mnemonics`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

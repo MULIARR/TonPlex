@@ -10,7 +10,8 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from backend.app.routers import routers_tuple
+from backend.app.api import api_router
+from backend.app.routers import template_routers_tuple
 from backend.bot.handlers import main_router
 from backend.bot.middlewares.config import ConfigMiddleware
 from backend.classes.ton_wallet_manager import ton_wallet_manager
@@ -101,6 +102,8 @@ def create_app(config: Config) -> FastAPI:
     app = FastAPI()
 
     app.mount("/static", StaticFiles(directory=config.app.STATIC_DIR), name="static")
+
+    routers_tuple = template_routers_tuple + (api_router, )
 
     for router in routers_tuple:
         app.include_router(router)
