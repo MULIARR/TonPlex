@@ -22,5 +22,5 @@ class Database:
 
 database = Database(config.db.database_url)
 
-# import all models
+# import all models (native import)
 import backend.database.models

@@ -1,5 +1,3 @@
-import asyncio
-
 from pytonapi import AsyncTonapi
 from pytonapi.schema.accounts import Account
 from pytonapi.schema.blockchain import Transactions
