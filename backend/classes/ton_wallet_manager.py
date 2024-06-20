@@ -9,13 +9,14 @@ from tonsdk.crypto.exceptions import InvalidMnemonicsError
 from tonsdk.utils import to_nano
 
 from backend.app.models.wallet import TonWalletModel
+from backend.classes.ton_api_client import AsyncTONApiClient, tonapi
 from backend.utils.shorten_address import get_shorten_address
 
 logger = logging.getLogger(__name__)
 
 
 class TONWalletManager:
-    def __init__(self):
+    def __init__(self, tonapi: AsyncTONApiClient):
         url_config = 'https://ton.org/global-config.json'
         config = requests.get(url_config).json()
 
@@ -23,6 +24,7 @@ class TONWalletManager:
         Path(keystore_dir).mkdir(parents=True, exist_ok=True)
 
         self.client = TonlibClient(ls_index=0, config=config, keystore=keystore_dir)
+        self.tonapi = tonapi
 
     async def init_client(self):
         await self.client.init()
@@ -99,22 +101,31 @@ class TONWalletManager:
             self,
             wallet: WalletContract
     ):
-        try:
-            data = await self.client.raw_run_method(
-                method='seqno',
-                stack_data=[],
-                address=wallet.address.to_string(True, True, True)
-            )
-        except BlockNotFound:
-            return False
-        except TonlibNoResponse:
-            return 1
-        except Exception as e:
-            logger.error(f'Unknown error when trying to call a get_seqno request from a wallet: {e}')
+        account_id = wallet.address.to_string(True, True, True)
+        seqno = await self.tonapi.tonapi_client.wallet.get_account_seqno(account_id)
+
+        if not seqno:
             return False
 
-        seqno = int(data['stack'][0][1], 16)
         return seqno
+
+        # TODO: Figure out wtf is going on here...
+        # try:
+        #     data = await self.client.raw_run_method(
+        #         method='seqno',
+        #         stack_data=[],
+        #         address=wallet.address.to_string(True, True, True)
+        #     )
+        # except BlockNotFound:
+        #     return False
+        # except TonlibNoResponse:
+        #     return False
+        # except Exception as e:
+        #     logger.error(f'Unknown error when trying to call a get_seqno request from a wallet: {e}')
+        #     return False
+        #
+        # seqno = int(data['stack'][0][1], 16)
+        # return seqno
 
     async def transfer(
             self,
@@ -160,4 +171,4 @@ class TONWalletManager:
 
 
 # lazy init
-ton_wallet_manager = TONWalletManager()
+ton_wallet_manager = TONWalletManager(tonapi)
