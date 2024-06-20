@@ -2,6 +2,7 @@ fastapi==0.100.0
 pydantic==2.4.1
 uvicorn
 aiogram==3.5.0
+pytonlib==0.0.61
 betterlogging
 environs
 strenum
