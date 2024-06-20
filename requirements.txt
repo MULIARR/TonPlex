@@ -14,3 +14,4 @@ asyncpg
 requests
 colorama
 pytonapi
+libsecp256k1
