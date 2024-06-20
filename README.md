@@ -4,6 +4,8 @@
 Noncustodial crypto wallet of the The Open Network (TON) in the form of a MiniApp in Telegram. 
 (Simple Web wrapper, Coursework on the subject of OOP)
 
+### <a href="https://t.me/TonPlexBot">Start me in Telegram @TonPlexBot</a> <i>(click)</i>
+
 # 👋🏽 Let's get acquainted
 ![1](https://github.com/MULIARR/TonPlex/assets/128001550/05632b7a-62f2-4696-a452-b57a6da59582)
 
