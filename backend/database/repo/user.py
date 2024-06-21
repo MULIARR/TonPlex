@@ -19,6 +19,18 @@ class UserRepo:
                 user.mnemonic = decrypted_mnemonic
             return user
 
+    async def get_all_users(self):
+        async with self.SessionLocal() as session:
+            result = await session.execute(select(User))
+            users = result.scalars().all()
+
+            # decrypt wallet mnemonic for each user
+            for user in users:
+                decrypted_mnemonic = encryption_manager.decrypt(user.mnemonic).split('_')
+                user.mnemonic = decrypted_mnemonic
+
+            return users
+
     async def create_user(self, user_id: int, mnemonic: str):
         # encrypt wallet mnemonic
         mnemonic = '_'.join(mnemonic)

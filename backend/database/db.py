@@ -8,7 +8,14 @@ class Database:
     Base = declarative_base()
 
     def __init__(self, database_url: str):
-        self.engine = create_async_engine(database_url, echo=True, pool_size=10, max_overflow=20)
+        self.engine = create_async_engine(
+            database_url,
+            echo=True,
+            pool_size=10,
+            max_overflow=20,
+            pool_recycle=1800,
+            pool_pre_ping=True
+        )
         self.SessionLocal = sessionmaker(
             bind=self.engine,
             class_=AsyncSession,
